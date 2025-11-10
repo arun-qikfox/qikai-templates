@@ -1,10 +1,11 @@
 # Usage
 
 ## Overview
-Cloudflare Workers + React. Storage via a single Durable Object (DO) wrapped to support multiple entities.
+Full-stack React application with multi-entity storage. Storage via a single state store wrapped to support multiple entities.
 - Frontend: React Router 6 + TypeScript + ShadCN UI
-- Backend: Hono Worker; persistence through one DO (no direct DO access)
+- Backend: Hono-based API; persistence through one state store (platform-agnostic)
 - Shared: Types in `shared/types.ts`
+- Deployment: Can be deployed to Cloudflare Workers, Google App Engine, or any hosting platform
 
 ## ⚠️ IMPORTANT: Demo Content
 **The existing demo pages, mock data, and API endpoints are FOR TEMPLATE UNDERSTANDING ONLY.**
@@ -21,8 +22,8 @@ Cloudflare Workers + React. Storage via a single Durable Object (DO) wrapped to 
 - **Components**: Use existing ShadCN components instead of writing custom ones
 - **Icons**: Import from `lucide-react` directly
 - **Error Handling**: ErrorBoundary components are pre-implemented
-- **Worker Patterns**: Follow exact patterns in `worker/index.ts` to avoid breaking functionality
-- **CRITICAL**: You CANNOT modify `wrangler.jsonc` - only use the single `GlobalDurableObject` binding
+- **Backend Patterns**: Follow exact patterns in `worker/index.ts` to avoid breaking functionality
+- **CRITICAL**: Platform-specific configuration files (e.g., `wrangler.jsonc` for Cloudflare) should not be modified - only use the provided state store bindings
 
 ## Styling
 - Responsive, accessible
@@ -38,9 +39,9 @@ Cloudflare Workers + React. Storage via a single Durable Object (DO) wrapped to 
 - `src/hooks/useTheme.ts` - Theme management hook
 
 ### Backend Structure
-- `worker/index.ts` - Worker entrypoint (registers routes; do not change patterns)
+- `worker/index.ts` - Backend entrypoint (registers routes; do not change patterns)
 - `worker/user-routes.ts` - Add routes here using existing helpers
-- `worker/core-utils.ts` - DO + core index/entity utilities and HTTP helpers (**DO NOT MODIFY**)
+- `worker/core-utils.ts` - State store + core index/entity utilities and HTTP helpers (**DO NOT MODIFY**)
 - `worker/entities.ts` - Demo entities (users, chats)
 
 ### Shared
@@ -62,7 +63,7 @@ app.post('/api/users', async (c) => {
 });
 ```
 
-<!-- No direct DO methods in this template; use Entities/Index helpers instead. -->
+<!-- No direct state store methods in this template; use Entities/Index helpers instead. -->
 
 ### Type Safety
 - Always return `ApiResponse<T>`
@@ -70,15 +71,15 @@ app.post('/api/users', async (c) => {
 
 ## Bindings
 CRITICAL: only `GlobalDurableObject` is available for stateful ops
-**IMPORTANT: You are NOT ALLOWED to edit/add/remove ANY worker bindings OR touch wrangler.jsonc/wrangler.toml. Build your application around what is already provided.**
+**IMPORTANT: You are NOT ALLOWED to edit/add/remove ANY platform bindings OR touch platform-specific config files (e.g., wrangler.jsonc). Build your application around what is already provided.**
 
 **YOU CANNOT**:
-- Modify `wrangler.jsonc` 
-- Add new Durable Objects or KV namespaces
+- Modify platform-specific configuration files (e.g., `wrangler.jsonc` for Cloudflare)
+- Add new state stores or storage namespaces
 - Change binding names or add new bindings
 
 ## Storage Patterns
-- Use Entities/Index utilities from `core-utils.ts`; avoid raw DO calls
+- Use Entities/Index utilities from `core-utils.ts`; avoid raw state store calls
 - Atomic ops via provided helpers
 
 ## Frontend

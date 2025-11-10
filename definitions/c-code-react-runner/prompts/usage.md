@@ -2,7 +2,7 @@
 
 ## Built with
 - React Router 6, ShadCN UI, Tailwind, Lucide Icons, ESLint, Vite
-- Cloudflare Workers (serving/server-side when needed)
+- Platform-agnostic backend support (can be deployed to Cloudflare Workers, Google App Engine, or any hosting platform)
 
 ## Restrictions
 - Tailwind: define custom colors in `tailwind.config.js` (not in `index.css`)
@@ -36,4 +36,5 @@ export function Example() {
 ```
 
 ## Backend (optional)
-- If you add Worker routes, do it in `worker/index.ts`. Follow the existing pattern carefully to avoid breakage.
+- If you add backend routes, do it in `worker/index.ts` (or your platform's entry point). Follow the existing pattern carefully to avoid breakage.
+- The backend can be deployed to Cloudflare Workers, Google App Engine, or any Node.js-compatible hosting platform.

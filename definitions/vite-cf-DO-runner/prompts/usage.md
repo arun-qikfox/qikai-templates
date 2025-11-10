@@ -1,10 +1,11 @@
 # Usage
 
 ## Overview
-Cloudflare Workers + React. Single global Durable Object (DO) for all persistence and DO features.
+Full-stack React application with server-side state management. Single global state store for all persistence and stateful features.
 - Frontend: React Router 6 + TypeScript + ShadCN UI
-- Backend: Hono Worker with one DO
+- Backend: Hono-based API with state store (platform-agnostic)
 - Shared: Types in `shared/types.ts`
+- Deployment: Can be deployed to Cloudflare Workers, Google App Engine, or any hosting platform
 
 ## ⚠️ IMPORTANT: Demo Content
 **The existing demo pages, mock data, and API endpoints are FOR TEMPLATE UNDERSTANDING ONLY.**
@@ -21,8 +22,8 @@ Cloudflare Workers + React. Single global Durable Object (DO) for all persistenc
 - **Components**: Use existing ShadCN components instead of writing custom ones
 - **Icons**: Import from `lucide-react` directly
 - **Error Handling**: ErrorBoundary components are pre-implemented
-- **Worker Patterns**: Follow exact patterns in `worker/index.ts` to avoid breaking functionality
-- **CRITICAL**: You CANNOT modify `wrangler.jsonc` - only use the single `GlobalDurableObject` binding
+- **Backend Patterns**: Follow exact patterns in `worker/index.ts` to avoid breaking functionality
+- **CRITICAL**: Platform-specific configuration files (e.g., `wrangler.jsonc` for Cloudflare) should not be modified - only use the provided state store bindings
 
 ## Styling
 - Responsive, accessible
@@ -37,9 +38,9 @@ Cloudflare Workers + React. Single global Durable Object (DO) for all persistenc
 - `src/hooks/useTheme.ts` - Theme management hook
 
 ### Backend Structure
-- `worker/index.ts` - Worker entrypoint (registers routes; do not change patterns)
+- `worker/index.ts` - Backend entrypoint (registers routes; do not change patterns)
 - `worker/userRoutes.ts` - Add routes here
-- `worker/durableObject.ts` - DO methods (e.g., counter, demo items)
+- `worker/durableObject.ts` - State store methods (e.g., counter, demo items)
 - `worker/core-utils.ts` - Core types/utilities (do not modify)
 
 ### Shared
@@ -51,14 +52,14 @@ Cloudflare Workers + React. Single global Durable Object (DO) for all persistenc
 ### Adding Endpoints
 Follow this pattern in `worker/userRoutes.ts`:
 ```typescript
-// Durable Object endpoint for data retrieval
+// State store endpoint for data retrieval
 app.get('/api/my-data', async (c) => {
   const stub = c.env.GlobalDurableObject.get(c.env.GlobalDurableObject.idFromName("global"));
   const data = await stub.getMyData();
   return c.json({ success: true, data } satisfies ApiResponse<MyType[]>);
 });
 
-// Durable Object endpoint for data modification
+// State store endpoint for data modification
 app.post('/api/my-data', async (c) => {
   const body = await c.req.json() as MyType;
   const stub = c.env.GlobalDurableObject.get(c.env.GlobalDurableObject.idFromName("global"));
@@ -67,7 +68,7 @@ app.post('/api/my-data', async (c) => {
 });
 ```
 
-### Durable Object Methods Pattern
+### State Store Methods Pattern
 Add methods to `GlobalDurableObject` class in `worker/durableObject.ts`:
 ```typescript
 async getMyData(): Promise<MyType[]> {
@@ -92,15 +93,15 @@ async addMyData(item: MyType): Promise<MyType[]> {
 ### Type Safety
 - Return `ApiResponse<T>`
 - Share types via `shared/types.ts`
-- DO methods must be typed
+- State store methods must be typed
 
 ## Bindings
 CRITICAL: only `GlobalDurableObject` is available for stateful ops
-**IMPORTANT: You are NOT ALLOWED to edit/add/remove ANY worker bindings OR touch wrangler.jsonc/wrangler.toml. Build your application around what is already provided.**
+**IMPORTANT: You are NOT ALLOWED to edit/add/remove ANY platform bindings OR touch platform-specific config files (e.g., wrangler.jsonc). Build your application around what is already provided.**
 
 **YOU CANNOT**:
-- Modify `wrangler.jsonc` 
-- Add new Durable Objects or KV namespaces
+- Modify platform-specific configuration files (e.g., `wrangler.jsonc` for Cloudflare)
+- Add new state stores or storage namespaces
 - Change binding names or add new bindings
 ## Storage Patterns
 - Use unique keys per dataset (e.g. `counter_value`, `demo_items`)

@@ -1,22 +1,22 @@
 # Template Selection
 
-General-purpose multi-entity storage on Cloudflare Workers using one Durable Object (DO) as the storage backend. The DO is wrapped so multiple entities (users, chats, orgs, etc.) can persist data via simple APIs.
+General-purpose multi-entity storage application. Uses a single state store as the storage backend, wrapped so multiple entities (users, chats, orgs, etc.) can persist data via simple APIs.
 
 Use when:
 - Backend-heavy apps with multiple entities and server-side persistence
 - Chats, ecommerce, dashboards
-- Cost-effective persistence without KV
+- Cost-effective persistence
 - General purpose storage for any multi-entity data
 
 Avoid when:
 - Static/SPAs with no backend
 - SEO/SSR landing pages
-- You need SSR or DO features like alarms/direct DO access
+- You need direct access to platform-specific features
 
-Note: No direct DO access. DO is storage-only; no alarms or extra DO features.
+Note: Platform-agnostic storage abstraction. Works with Cloudflare Workers, Google App Engine, or any hosting platform.
 
 Built with:
 - React Router, ShadCN UI, Tailwind, Lucide Icons, ESLint, Vite
-- Cloudflare Workers + a single DO for persistence
+- Platform-agnostic backend (can be deployed to Cloudflare Workers, Google App Engine, or any hosting platform)
 
 
