@@ -240,7 +240,7 @@ export function DemoPage() { // Don't touch this exporting, Its a named export
         </h1>
 
         <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto text-pretty">
-          We are building your app, powered by Cloudflare Agents SDK
+          We are building your app with a multi-platform AI gateway and Firestore-backed sessions
         </p>
       </motion.div>
       

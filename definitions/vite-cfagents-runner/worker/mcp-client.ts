@@ -22,7 +22,7 @@ export class MCPManager {
         const transport = new SSEClientTransport(new URL(serverConfig.sseUrl));
 
         const client = new Client({
-          name: 'cloudflare-agent',
+          name: 'multi-platform-agent',
           version: '1.0.0'
         }, {
           capabilities: {}

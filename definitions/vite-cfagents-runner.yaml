@@ -1,5 +1,5 @@
 name: "vite-cfagents-runner"
-description: "Vite/React application with Cloudflare Agents SDK and MCP support"
+description: "Vite/React AI chat application with Firestore-backed persistence and multi-platform deployment"
 base_reference: "vite-reference"
 
 # Patch package.json to match original template name

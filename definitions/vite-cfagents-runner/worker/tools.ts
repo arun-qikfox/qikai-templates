@@ -104,14 +104,13 @@ const formatSearchResults = (data: SerpApiResponse, query: string, numResults: n
     : `No results found for "${query}". Try: https://www.google.com/search?q=${encodeURIComponent(query)}`;
 };
 
-async function performWebSearch(query: string, numResults = 5): Promise<string> {
-  const apiKey = process.env.SERPAPI_KEY;
-  if (!apiKey) {
+async function performWebSearch(query: string, serpApiKey: string | undefined, numResults = 5): Promise<string> {
+  if (!serpApiKey) {
     return `🔍 Web search requires SerpAPI key. Get one at https://serpapi.com/\nFallback: https://www.google.com/search?q=${encodeURIComponent(query)}`;
   }
 
   try {
-    const response = await fetch(createSearchUrl(query, apiKey, numResults), {
+    const response = await fetch(createSearchUrl(query, serpApiKey, numResults), {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WebBot/1.0)', 'Accept': 'application/json' },
       signal: AbortSignal.timeout(15000)
     });
@@ -158,7 +157,7 @@ async function fetchWebContent(url: string): Promise<string> {
   }
 }
 
-export async function executeTool(name: string, args: Record<string, unknown>): Promise<ToolResult> {
+export async function executeTool(name: string, args: Record<string, unknown>, serpApiKey?: string): Promise<ToolResult> {
   try {
     switch (name) {
       case 'get_weather':
@@ -176,7 +175,7 @@ export async function executeTool(name: string, args: Record<string, unknown>): 
           return { content };
         }
         if (typeof query === 'string') {
-          const content = await performWebSearch(query, num_results as number);
+          const content = await performWebSearch(query, serpApiKey, num_results as number);
           return { content };
         }
         return { error: 'Either query or url parameter is required' };

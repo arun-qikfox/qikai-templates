@@ -6,9 +6,6 @@ import { logger } from "hono/logger";
 import { Env } from "./core-utils";
 import { API_RESPONSES } from "./config";
 import { userRoutes, coreRoutes } from "./userRoutes";
-import { ChatAgent } from "./agent";
-import { AppController } from "./app-controller";
-export { ChatAgent, AppController };
 export interface ClientErrorReport {
   message: string;
   url: string;

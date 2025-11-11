@@ -1,5 +1,5 @@
 name: "vite-cf-DO-KV-runner"
-description: "Vite/React application with Cloudflare Durable Objects and KV storage"
+description: "Vite/React application with seeded Firestore datastore and HTTP provider fallback"
 base_reference: "vite-reference"
 
 # Patch package.json to match original template name

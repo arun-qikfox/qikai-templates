@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Setup script for the Cloudflare Durable Object template
+# Setup script for the Firestore-ready full-stack template
 # Usage: ./setup.sh <new-project-name>
 
 set -e  # Exit on any error
@@ -13,7 +13,7 @@ if [ $# -eq 0 ]; then
 fi
 
 NEW_PROJECT_NAME="$1"
-echo "Setting up Durable Object project: $NEW_PROJECT_NAME"
+echo "Setting up datastore-backed project: $NEW_PROJECT_NAME"
 
 # Update project name in package.json if needed
 if command -v jq >/dev/null 2>&1; then
