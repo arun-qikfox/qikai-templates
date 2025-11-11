@@ -156,7 +156,7 @@ export function DemoPage() {
       </div>
 
       <footer className="mt-8 text-center text-muted-foreground/80">
-        <p>Powered by Cloudflare</p>
+        <p>Default storage: Google Cloud Firestore • Switch via environment configuration</p>
       </footer>
 
       <Toaster richColors closeButton />
