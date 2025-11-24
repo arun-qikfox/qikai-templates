@@ -95,7 +95,7 @@ export default function Home() {
         </motion.div>
 
         <footer className="absolute bottom-8 text-center text-muted-foreground/80">
-          <p>Powered by Cloudflare</p>
+          <p>Powered by qikfox</p>
         </footer>
       </main>
     </>
