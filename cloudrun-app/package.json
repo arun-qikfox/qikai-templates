@@ -1,0 +1,10 @@
+{
+  "name": "vibesdk-cloudrun-app",
+  "version": "1.0.0",
+  "description": "Minimal manifest to satisfy Cloud Build install steps for static VibSDK deployments.",
+  "private": true,
+  "scripts": {
+    "build": "echo \"Skipping build: static assets provided\""
+  },
+  "dependencies": {}
+}

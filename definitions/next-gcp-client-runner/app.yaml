@@ -1,0 +1,17 @@
+runtime: nodejs20
+service: default
+instance_class: F1
+
+automatic_scaling:
+  min_instances: 0
+  max_instances: 1
+
+env_variables:
+  NODE_ENV: production
+
+# Optimized for static/SSG content with minimal API needs
+# Next.js handles routing, but we can use static file serving for better performance
+handlers:
+  - url: /.*
+    script: auto
+

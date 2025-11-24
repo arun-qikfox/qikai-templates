@@ -1,0 +1,16 @@
+runtime: nodejs20
+service: default
+instance_class: F1
+
+automatic_scaling:
+  min_instances: 0
+  max_instances: 2
+
+env_variables:
+  NODE_ENV: production
+
+# Next.js handles routing, so we serve all requests through the Node.js runtime
+handlers:
+  - url: /.*
+    script: auto
+

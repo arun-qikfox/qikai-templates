@@ -1,0 +1,12 @@
+name: "vite-cf-DO-v2-runner-gcp"
+description: "Vite/React full-stack template optimized for Google App Engine with pluggable data store (Firestore default)"
+base_reference: "vite-reference"
+
+# Patch package.json to match original template name
+package_patches:
+  name: "vite-cf-do-v2-runner-gcp"
+
+excludes:
+  - "worker/user-routes.ts"
+  - "wrangler.jsonc"
+

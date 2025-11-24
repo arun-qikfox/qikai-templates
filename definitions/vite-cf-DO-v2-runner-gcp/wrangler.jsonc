@@ -1,0 +1,22 @@
+// NOTE: This file is kept for reference only. This template is optimized for Google App Engine.
+// For GCP deployment, use app.yaml instead of wrangler.jsonc.
+// This file should not be used during GCP deployment.
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "vite-gcp-firestore-runner",
+	"main": "worker/index.ts",
+	"compatibility_date": "2025-04-24",
+	"assets": {
+		"not_found_handling": "single-page-application",
+		"run_worker_first": ["/api/*", "!/api/docs/*"]
+	},
+	"observability": {
+		"enabled": true
+	},
+	"vars": {
+		"DATA_PROVIDER": "firestore",
+		"FIRESTORE_PROJECT_ID": "",
+		"FIRESTORE_CLIENT_EMAIL": "",
+		"FIRESTORE_DATABASE_ID": "(default)"
+	}
+}

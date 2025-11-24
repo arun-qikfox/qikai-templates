@@ -1,0 +1,5 @@
+{
+  "supportedProviders": ["cloudflare"],
+  "deploymentType": "platform-specific"
+}
+

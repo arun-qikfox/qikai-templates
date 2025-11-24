@@ -221,7 +221,11 @@ class TemplateGenerator:
                     # Copy files
                     for file in files:
                         # Skip certain files that shouldn't be copied
-                        if file in ['.DS_Store', '.eslintcache', '.template-definition.json'] or file.endswith('.yaml'):
+                        # Allow app.yaml, app.yml, cloudbuild.yaml, cloudbuild.yml for platform configs
+                        if file in ['.DS_Store', '.eslintcache', '.template-definition.json']:
+                            continue
+                        # Skip only template definition YAML files (template-name.yaml), not platform configs
+                        if file.endswith('.yaml') and file.count('-') >= 2 and file.replace('.yaml', '') in [p.stem for p in self.definitions_dir.glob('*.yaml')]:
                             continue
                         
                         src_file = root_path / file

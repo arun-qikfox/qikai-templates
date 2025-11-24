@@ -1,12 +1,13 @@
 # Usage
 
 ## Overview
-Full-stack React + Hono starter wired for Google Cloud App Engine with Firestore by default. The backend exposes a pluggable data store so you can swap Firestore for any HTTPS-accessible database (MongoDB Data API, Supabase REST, custom microservice) by flipping environment variables.
+Full-stack React + Hono starter optimized for Google Cloud App Engine with Firestore by default. The backend exposes a pluggable data store so you can swap Firestore for any HTTPS-accessible database (MongoDB Data API, Supabase REST, custom microservice) by flipping environment variables.
 
 - **Frontend**: React Router 6, ShadCN UI, Tailwind, TypeScript
-- **Backend**: Hono API running on Cloudflare Workers or App Engine Node
+- **Backend**: Hono API running on Google App Engine (Node.js runtime)
 - **Storage**: Firestore REST integration (default) + HTTP proxy provider
 - **Shared**: Types in `shared/types.ts`
+- **Deployment Target**: Google App Engine (Node.js 20)
 
 ## Important: Demo Content
 The bundled pages, mock data, and routes are for reference only.
@@ -21,7 +22,7 @@ The bundled pages, mock data, and routes are for reference only.
 - `src/lib/api-client.ts`: React Query client
 
 ## Environment Variables
-Set these before deploying (Cloudflare secrets or App Engine env vars):
+Set these before deploying (App Engine environment variables or Secret Manager):
 
 ### Firestore (default)
 - `DATA_PROVIDER=firestore`
@@ -55,10 +56,11 @@ app.post('/api/users', async (c) => {
 ```
 
 ## Firestore Notes
-- Service account keys should be stored as **secrets** (`wrangler secret put`, Secret Manager) not committed to git.
+- Service account keys should be stored as **secrets** (Google Cloud Secret Manager) not committed to git.
 - `FIRESTORE_PRIVATE_KEY_B64` must include the full PEM (header + footer) before encoding.
 - Firestore REST API is used; requests are signed and cached per instance.
 - `entities.ts` shows how to seed collections and run CRUD operations.
+- Configure secrets in App Engine: `gcloud app deploy --update-secrets`
 
 ## Styling & Frontend
 - Keep Tailwind customization in `tailwind.config.js`
@@ -66,15 +68,15 @@ app.post('/api/users', async (c) => {
 - Handle loading/error states in the UI
 
 ### Theme & Color System
-- The template already ships with the standard ShadCN `ThemeProvider` (`src/components/theme-provider.tsx`) and a ready-made mode toggle button. Always keep or reintroduce that toggle in Phase 1 so users can switch themes instantly.
-- Treat **light mode** as the hero experience but ship an equally polished **dark mode** in the same phase. Use Tailwind `dark:` variants, `bg-background`, `text-foreground`, and the CSS variables defined in `globals.css` so colors stay in sync between themes.
-- Never hard-code raw hex colors inside components. Extend the Tailwind config or CSS variables if new semantics are required (e.g., `--brand-primary`, `--brand-muted`) and reference those tokens across both themes.
-- Before completing a phase, manually review every major screen in both modes to ensure contrast ratios, shadows, and gradients remain legible.
+- `src/components/theme-provider.tsx` and the bundled mode toggle (in the navbar layout) already handle light/dark switching—reuse them whenever you restructure the shell. If you remove the stock header, add an obvious toggle back in Phase 1.
+- Light mode is the primary spec, but dark mode must ship simultaneously. Use Tailwind `dark:` modifiers and the CSS variables (`--background`, `--foreground`, etc.) defined in `src/styles/globals.css` so both themes stay synchronized.
+- Avoid hard-coded text/background colors inside components. Introduce semantic tokens (e.g., `--brand-primary`, `--surface-muted`) through Tailwind or CSS variables and apply them consistently across both themes.
+- QA every scene (landing, dashboard, bookings, settings) in both modes before completing a phase to catch low-contrast or washed-out states early.
 
 ## Deployment
-- App Engine: `npm run build && gcloud app deploy`
-- Cloudflare Workers: `bun run build && wrangler deploy`
-- Ensure the same environment variables exist in both runtimes for consistent behavior.
+- **Google App Engine**: `npm run build && gcloud app deploy`
+- Ensure environment variables are configured in `app.yaml` or via Secret Manager
+- The server exports the Hono app for Node.js runtime compatibility
 
 ## Custom Providers
 - Implement your own HTTPS service that accepts the same payloads (`DataStore` interface).

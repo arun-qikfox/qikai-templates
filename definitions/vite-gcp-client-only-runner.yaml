@@ -1,0 +1,21 @@
+name: "vite-gcp-client-only-runner"
+description: "Vite/React frontend-only template optimized for Google App Engine static hosting"
+base_reference: "vite-reference"
+
+# Patch package.json to match original template name and remove Cloudflare tooling
+package_patches:
+  name: "vite-gcp-client-only-runner"
+  scripts:
+    deploy: "npm run build && gcloud app deploy"
+    'cf-typegen': null
+  dependencies:
+    wrangler: null
+  devDependencies:
+    "@cloudflare/vite-plugin": null
+    "@cloudflare/workers-types": null
+
+excludes:
+  - "worker/**"           # Remove Cloudflare Workers backend
+  - "wrangler.*"          # Remove Cloudflare config files
+  - "cloudflare-env.d.ts" # Remove Cloudflare environment declarations if present
+

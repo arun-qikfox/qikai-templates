@@ -1,0 +1,13 @@
+name: "next-gcp-client-runner"
+description: "Next.js frontend-oriented template optimized for Google App Engine with minimal service requirements"
+base_reference: "next-reference"
+
+# Patch package.json to match original template name
+package_patches:
+  name: "next-gcp-client-runner"
+
+excludes:
+  - "wrangler.jsonc"           # Remove Cloudflare config
+  - "open-next.config.ts"      # Remove Cloudflare-specific Next.js config
+  - "cloudflare-env.d.ts"      # Remove Cloudflare type definitions
+

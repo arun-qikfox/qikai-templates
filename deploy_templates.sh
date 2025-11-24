@@ -2,16 +2,35 @@
 
 set -euo pipefail
 
+# Determine Python executable (prefer python3, fall back to python)
+if command -v python3 >/dev/null 2>&1; then
+  PYTHON_CMD="python3"
+elif command -v python >/dev/null 2>&1; then
+  PYTHON_CMD="python"
+else
+  echo "❌ python3/python not found. Please install Python."
+  exit 1
+fi
+
+# Determine Pip executable (prefer pip3, fall back to pip or python -m pip)
+if command -v pip3 >/dev/null 2>&1; then
+  PIP_CMD="pip3"
+elif command -v pip >/dev/null 2>&1; then
+  PIP_CMD="pip"
+else
+  PIP_CMD="$PYTHON_CMD -m pip"
+fi
+
 echo "🚀 Starting template deployment process..."
 
 # Ensure PyYAML is installed
 echo "🐍 Checking Python dependencies..."
-if ! python3 -c "import yaml" 2>/dev/null; then
+if ! $PYTHON_CMD -c "import yaml" 2>/dev/null; then
     echo "📦 Installing PyYAML..."
-    pip3 install pyyaml || pip install pyyaml || {
+    if ! $PIP_CMD install pyyaml; then
         echo "❌ Failed to install PyYAML. Please install it manually: pip install pyyaml"
         exit 1
-    }
+    fi
     echo "✅ PyYAML installed successfully"
 else
     echo "✅ PyYAML is already installed"
@@ -19,12 +38,12 @@ fi
 
 # 1) Generate templates into build/
 echo "🧱 Generating templates into build/..."
-python3 tools/generate_templates.py --clean
+$PYTHON_CMD tools/generate_templates.py --clean
 echo "✅ Templates generated"
 
 # 2) Generate template catalog (generate_template_catalog.py now defaults to ./build)
 echo "📋 Generating template catalog..."
-python3 generate_template_catalog.py --output template_catalog.json --pretty
+$PYTHON_CMD generate_template_catalog.py --output template_catalog.json --pretty
 echo "✅ Generated template catalog"
 
 # Create optimized zip files for templates
@@ -42,7 +61,7 @@ create_template_zip() {
   echo "Creating zip for: $template_name"
   
   # Use Python script to create zip (compatible with environments without zip command)
-  if python3 create_zip.py "$template_dir" "$zip_file"; then
+  if $PYTHON_CMD create_zip.py "$template_dir" "$zip_file"; then
     # Verify the zip file was created
     if [ -f "$zip_file" ]; then
       local size=$(du -h "$zip_file" | cut -f1)
@@ -72,12 +91,43 @@ for dir in build/*/; do
     continue
   fi
   
-  # Check if it's a valid template (has required files)
-  if [[ -f "$dir/package.json" && (-f "$dir/wrangler.jsonc" || -f "$dir/wrangler.toml") && -d "$dir/prompts" ]]; then
+  has_workers_config=false
+  [[ -f "$dir/wrangler.jsonc" || -f "$dir/wrangler.toml" ]] && has_workers_config=true
+  has_gcp_config=false
+  # GCP templates require both app.yaml and .gcloudignore (matching catalog generator logic)
+  if [[ -f "$dir/app.yaml" && -f "$dir/.gcloudignore" ]]; then
+    has_gcp_config=true
+  fi
+  
+  # Check for all required template files
+  has_package_json=false
+  has_prompts_dir=false
+  has_selection_md=false
+  has_usage_md=false
+  
+  [[ -f "$dir/package.json" ]] && has_package_json=true
+  [[ -d "$dir/prompts" ]] && has_prompts_dir=true
+  [[ -f "$dir/prompts/selection.md" ]] && has_selection_md=true
+  [[ -f "$dir/prompts/usage.md" ]] && has_usage_md=true
+  
+  if [[ "$has_package_json" = true && "$has_prompts_dir" = true && "$has_selection_md" = true && "$has_usage_md" = true && ( "$has_workers_config" = true || "$has_gcp_config" = true ) ]]; then
+    if [[ "$has_workers_config" = true && "$has_gcp_config" = true ]]; then
+      echo "📦 $dir_name has both Cloudflare and GCP configs; zipping once"
+    elif [[ "$has_workers_config" = true ]]; then
+      echo "📦 $dir_name detected as Cloudflare template"
+    else
+      echo "📦 $dir_name detected as GCP template"
+    fi
     create_template_zip "$dir" &
     pids+=($!)
   else
-    echo "⏭️  Skipping $dir_name (not a valid template)"
+    echo "⏭️  Skipping $dir_name"
+    echo "   Reasons:"
+    [[ "$has_package_json" != true ]] && echo "   - Missing package.json"
+    [[ "$has_prompts_dir" != true ]] && echo "   - Missing prompts/ directory"
+    [[ "$has_selection_md" != true ]] && echo "   - Missing prompts/selection.md"
+    [[ "$has_usage_md" != true ]] && echo "   - Missing prompts/usage.md"
+    [[ "$has_workers_config" != true && "$has_gcp_config" != true ]] && echo "   - Missing platform config (needs wrangler.jsonc/wrangler.toml OR app.yaml+.gcloudignore)"
   fi
 done
 

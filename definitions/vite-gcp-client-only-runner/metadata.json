@@ -1,0 +1,5 @@
+{
+  "supportedProviders": ["gcp"],
+  "deploymentType": "client-only"
+}
+
