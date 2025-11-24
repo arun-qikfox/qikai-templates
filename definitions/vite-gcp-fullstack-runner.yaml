@@ -1,0 +1,20 @@
+name: "vite-gcp-fullstack-runner"
+description: "Vite/React full-stack template optimized for Google App Engine with pluggable data store (Firestore default)"
+base_reference: "vite-reference"
+
+# Patch package.json to match original template name and drop Cloudflare tooling
+package_patches:
+  name: "vite-gcp-fullstack-runner"
+  scripts:
+    deploy: "npm run build && gcloud app deploy"
+    'cf-typegen': null
+  dependencies:
+    wrangler: null
+  devDependencies:
+    "@cloudflare/vite-plugin": null
+    "@cloudflare/workers-types": null
+
+excludes:
+  - "wrangler.*"
+  - "cloudflare-env.d.ts"
+

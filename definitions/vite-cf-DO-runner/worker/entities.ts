@@ -76,6 +76,3 @@ export async function incrementCounter(env: Env, amount = 1): Promise<number> {
   return updated.value;
 }
 
-
-
-

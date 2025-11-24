@@ -321,6 +321,3 @@ export function createFirestoreStore(config: FirestoreConfig): DataStore {
   };
 }
 
-
-
-

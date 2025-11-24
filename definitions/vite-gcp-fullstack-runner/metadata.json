@@ -1,0 +1,5 @@
+{
+  "supportedProviders": ["gcp"],
+  "deploymentType": "full-stack"
+}
+

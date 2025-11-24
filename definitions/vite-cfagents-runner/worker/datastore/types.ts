@@ -28,6 +28,3 @@ export interface DataStore {
   delete(collection: string, id: string): Promise<boolean>;
 }
 
-
-
-

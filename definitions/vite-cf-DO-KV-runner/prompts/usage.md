@@ -86,6 +86,3 @@ Configure datastore credentials once secrets are provisioned:
 - Call `/api/*` endpoints directly
 - Handle loading/error states using shared types
 
-
-
-

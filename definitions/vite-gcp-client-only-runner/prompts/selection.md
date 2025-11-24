@@ -21,5 +21,6 @@ Built with:
 - React Router, ShadCN UI, Tailwind, Lucide Icons, ESLint, Vite
 - Static file serving via Google App Engine
 - Standard Vite build process (no Cloudflare-specific build tools)
+- Emits production assets to `dist/client/**` (required by App Engine preview/deploy)
 - TypeScript for type safety
 

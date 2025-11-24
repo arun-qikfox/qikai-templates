@@ -124,6 +124,3 @@ export function defaultModel(): string {
   return DEFAULT_MODEL;
 }
 
-
-
-

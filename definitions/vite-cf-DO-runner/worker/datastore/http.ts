@@ -109,6 +109,3 @@ export function createHttpDataStore(config: HttpProviderConfig): DataStore {
   };
 }
 
-
-
-

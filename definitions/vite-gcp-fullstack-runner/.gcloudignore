@@ -1,30 +1,34 @@
-# GCP client-only deployment ignore file
 #
-# Keep this allow-list aligned with AppEnginePreviewService (dist/client).
+# GCP full-stack deployment ignore file
 #
 
 # Ignore everything by default
 *
 
-# Include client bundle
+# Include dist folder (client + server bundles)
 !/dist/
 !/dist/client/
 !/dist/client/**
 !/dist/server.js
+!/dist/**/*.js
+
+# Include server entry points
+!/server.ts
+!/server.js
 
 # Include deployment metadata
 !/app.yaml
 !/package.json
 !/.gcloudignore
 
-# Include runtime config files (for reference/debugging)
+# include runtime configs
 !/tsconfig.json
 !/tsconfig.*.json
 !/tailwind.config.js
 !/postcss.config.js
 !/vite.config.ts
 
-# Exclude development artifacts
+# Exclude sensitive/dev artifacts
 .gcloud-key.json
 .env
 .env.*
@@ -36,10 +40,6 @@ worker/
 .vscode/
 .idea/
 .eslintcache
-.wrangler/
-.wrangler/**/*
-.vite/
-.next/
 coverage/
 .nyc_output/
 *.ts
@@ -50,4 +50,5 @@ coverage/
 *.tar.gz
 *.log
 .DS_Store
+
 

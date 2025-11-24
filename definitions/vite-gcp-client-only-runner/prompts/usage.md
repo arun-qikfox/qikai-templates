@@ -41,7 +41,7 @@ npm run preview  # Preview production build
 
 ## Deployment
 - **Google App Engine**: `npm run build && gcloud app deploy`
-- The build output (`dist/client/`) is served as static files
+- The build output (`dist/client/`) is served as static files—do **not** change the Vite `build.outDir`
 - No server-side code is required or deployed
 
 ## Static File Serving
