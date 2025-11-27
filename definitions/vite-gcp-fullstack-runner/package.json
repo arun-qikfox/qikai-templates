@@ -5,10 +5,14 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite --host 0.0.0.0 --port ${PORT:-3000}",
-		"build": "vite build",
+		"build": "bun run build:app-engine",
+		"build:client": "vite build",
+		"build:server": "tsc server.ts --outDir dist --target es2022 --module esnext --moduleResolution node --esModuleInterop --skipLibCheck",
+		"build:app-engine": "bun run build:client && bun run build:server",
 		"lint": "eslint --cache -f json --quiet .",
 		"preview": "bun run build && vite preview --host 0.0.0.0 --port ${PORT:-4173}",
-		"deploy": "npm run build && gcloud app deploy"
+		"deploy": "npm run build && gcloud app deploy",
+		"verify:template": "node ./bin/verify-outdir.js"
 	},
 	"dependencies": {
 		"@dnd-kit/core": "^6.3.1",
