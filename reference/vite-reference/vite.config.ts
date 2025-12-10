@@ -88,6 +88,27 @@ function watchDependenciesPlugin() {
 // https://vite.dev/config/
 export default ({ mode }: { mode: string }) => {
   const env = loadEnv(mode, process.cwd());
+  const previewDomain = env.VITE_PREVIEW_DOMAIN; // Will be set by preview service
+  const previewPort = env.VITE_PREVIEW_PORT; // Will be set by preview service
+  
+  // Configure HMR WebSocket for preview environments
+  let hmrConfig: { host?: string; protocol?: string; port?: string | number; clientPort?: string | number } | undefined;
+  if (previewDomain) {
+    try {
+      const previewUrl = new URL(previewDomain);
+      const port = previewUrl.port || (previewUrl.protocol === 'https:' ? '443' : '80');
+      hmrConfig = {
+        host: previewUrl.hostname,
+        protocol: previewUrl.protocol === 'https:' ? 'wss' : 'ws',
+        port: port,
+        clientPort: port,
+      };
+    } catch (error) {
+      // If previewDomain is not a valid URL, fall back to default behavior
+      console.warn('Invalid VITE_PREVIEW_DOMAIN, using default HMR config:', error);
+    }
+  }
+  
   return defineConfig({
     plugins: [react(), cloudflare(), watchDependenciesPlugin()],
     build: {
@@ -106,6 +127,13 @@ export default ({ mode }: { mode: string }) => {
     },
     server: {
       allowedHosts: true,
+      host: '0.0.0.0', // Allow external connections
+      port: previewPort ? parseInt(previewPort, 10) : 5173,
+      hmr: hmrConfig || {
+        // Fallback for local development
+        host: 'localhost',
+        protocol: 'ws',
+      },
     },
     resolve: {
       alias: {
