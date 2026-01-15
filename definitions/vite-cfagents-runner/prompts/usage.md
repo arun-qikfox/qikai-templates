@@ -42,6 +42,7 @@ Store secrets securely (App Engine Secret Manager, `wrangler secret`, etc.).
 - Reuse the provided session APIs rather than rolling your own.
 - Validate tool inputs in `worker/tools.ts`; handle errors gracefully.
 - Keep UI responsive and accessible; leverage existing Shadcn components.
+- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`. Request changes instead of editing them.
 
 ## Backend Structure
 - `worker/core-utils.ts` – datastore factory, gateway helpers, response helpers

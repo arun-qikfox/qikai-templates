@@ -6,6 +6,8 @@
 
 ## Restrictions
 - Tailwind: define custom colors in `tailwind.config.js` (not in `index.css`)
+- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`
+- If a change is required, request it instead of editing those files
 
 ## Styling
 - Responsive, accessible

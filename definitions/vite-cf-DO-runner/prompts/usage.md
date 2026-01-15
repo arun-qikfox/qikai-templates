@@ -23,6 +23,7 @@ Full-stack React application with server-side state management powered by a prov
 - **Error Handling**: Error boundaries are provided; wire them into your flows
 - **Backend Patterns**: Follow `worker/index.ts` and `worker/userRoutes.ts`, using `createDataStore` for persistence
 - **Platform Config**: Keep deployment descriptors (e.g., `wrangler.jsonc`, `app.yaml`) intact unless absolutely required
+- **Protected configs**: Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`. Request changes instead of editing them.
 
 ## Styling
 - Responsive, accessible layouts

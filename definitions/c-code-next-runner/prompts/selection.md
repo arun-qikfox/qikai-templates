@@ -2,6 +2,10 @@
 
 This template offers a streamlined and performant foundation for building beautiful, responsive landing pages with modern animations and iconography.
 
+## Template Constraints
+- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`.
+- If a change is required, request it instead of editing those files.
+
 * Use this template when you need:
   * High-performance server-side heavy projects and dashboards
   * Pages optimized for SEO with server-rendered content

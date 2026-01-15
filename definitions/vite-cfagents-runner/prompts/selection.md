@@ -2,6 +2,10 @@
 
 This template delivers a production-ready AI chat experience with streaming responses, tool calling, and session persistence backed by Firestore (default) or any HTTPS-accessible datastore. It runs on Google App Engine by default and remains portable to Cloudflare Workers or other hosts through configuration.
 
+## Template Constraints
+- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`.
+- If a change is required, request it instead of editing those files.
+
 * Use this template when you need:
   * Full-featured AI chat applications with tool/function calling
   * Multi-model support (Gemini, OpenAI, Claude via gateway URLs)

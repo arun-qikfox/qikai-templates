@@ -23,6 +23,7 @@ Full-stack React + Hono template with a seeded datastore abstraction. Defaults t
 - **Error Handling**: Error boundaries are pre-implemented
 - **Backend Patterns**: Follow `worker/index.ts` + `worker/userRoutes.ts` and rely on datastore helpers
 - **Platform Config**: Keep deployment descriptors (e.g., `wrangler.jsonc`, `app.yaml`) intact unless explicitly required
+- **Protected configs**: Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`. Request changes instead of editing them.
 
 ## Code Organization
 

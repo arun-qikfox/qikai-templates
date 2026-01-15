@@ -32,6 +32,7 @@ npm run preview  # Preview production build
 - Prefer provided ShadCN components
 - Handle loading/error states in the UI
 - Use React Router for client-side navigation
+- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`. Request changes instead of editing them.
 
 ### Theme & Color System
 - Theme toggle is available in the layout

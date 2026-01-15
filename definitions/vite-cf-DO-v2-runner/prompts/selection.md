@@ -2,6 +2,10 @@
 
 General-purpose full-stack application template with Google Cloud Firestore as the default data store. The backend exposes a storage abstraction that can point to Firestore or any HTTPS-accessible database (e.g., MongoDB Data API) via environment configuration.
 
+## Template Constraints
+- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`.
+- If a change is required, request it instead of editing those files.
+
 Use when:
 - Backend-heavy apps with multiple entities and server-side persistence
 - Chats, ecommerce, dashboards

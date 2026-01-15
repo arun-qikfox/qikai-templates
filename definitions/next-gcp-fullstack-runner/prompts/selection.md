@@ -2,6 +2,10 @@
 
 Next.js full-stack application template optimized for Google App Engine. Perfect for applications that require both server-side rendering and API routes, with database integration and server-side logic.
 
+## Template Constraints
+- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`.
+- If a change is required, request it instead of editing those files.
+
 Use when:
 - Full-stack applications with API routes
 - Server-side rendering (SSR) requirements

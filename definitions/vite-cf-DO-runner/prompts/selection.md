@@ -2,6 +2,10 @@
 
 Full-stack application with server-side state management. Minimal setup that uses a global state store for persistence and stateful features.
 
+## Template Constraints
+- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`.
+- If a change is required, request it instead of editing those files.
+
 Use when:
 - You need a backend with persistent storage using Firestore (default) or any HTTPS data provider
 - Real-time/stateful services, dashboards, counters

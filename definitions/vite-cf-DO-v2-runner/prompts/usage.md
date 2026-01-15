@@ -64,6 +64,7 @@ app.post('/api/users', async (c) => {
 - Keep Tailwind customization in `tailwind.config.js`
 - Prefer provided ShadCN components; use React Query for async data
 - Handle loading/error states in the UI
+- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`. Request changes instead of editing them.
 
 ### Theme & Color System
 - The template already ships with the standard ShadCN `ThemeProvider` (`src/components/theme-provider.tsx`) and a ready-made mode toggle button. Always keep or reintroduce that toggle in Phase 1 so users can switch themes instantly.

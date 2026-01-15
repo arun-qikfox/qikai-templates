@@ -2,6 +2,10 @@
 
 Next.js frontend-oriented template optimized for Google App Engine with minimal service requirements. Perfect for SEO-optimized landing pages, marketing sites, and content-heavy applications that benefit from server-side rendering but have minimal backend needs.
 
+## Template Constraints
+- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`.
+- If a change is required, request it instead of editing those files.
+
 Use when:
 - SEO-optimized landing pages and marketing sites
 - Content-heavy websites with server-side rendering

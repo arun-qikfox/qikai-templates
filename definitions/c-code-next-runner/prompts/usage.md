@@ -18,6 +18,8 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
   * When including `tailwind.config.js`, **hardcode custom colors** directly in the config file – do **not** define them in `globals.css` unless specified
   * Next.js cannot infer props for React Components, so YOU MUST provide default props
   * Use Page router and not App router
+  * Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`
+  * If a change is required, request it instead of editing those files
 
 - Styling:
   * Must generate **fully responsive** and accessible layouts

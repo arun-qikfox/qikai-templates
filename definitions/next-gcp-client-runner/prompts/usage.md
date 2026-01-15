@@ -32,6 +32,8 @@ Note: This template is optimized for frontend-heavy workloads. Use API routes sp
 - Next.js cannot infer props for React Components, so YOU MUST provide default props
 - Use Page router and not App router
 - Keep API routes minimal - this template is optimized for frontend workloads
+- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`
+- If a change is required, request it instead of editing those files
 
 ## Styling:
 - Must generate **fully responsive** and accessible layouts

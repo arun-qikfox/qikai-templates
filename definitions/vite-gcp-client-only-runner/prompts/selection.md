@@ -2,6 +2,10 @@
 
 React/Vite frontend-only template optimized for Google App Engine static hosting. Perfect for single-page applications, landing pages, portfolios, and marketing sites that don't require server-side logic.
 
+## Template Constraints
+- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`.
+- If a change is required, request it instead of editing those files.
+
 Use when:
 - Static websites and SPAs (Single Page Applications)
 - Landing pages, portfolios, marketing sites
