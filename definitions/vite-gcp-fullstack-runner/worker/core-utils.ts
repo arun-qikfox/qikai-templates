@@ -86,9 +86,9 @@ export function createDataStore(env: Env): DataStore {
 
 export const ok = <T>(c: Context, data: T) => c.json({ success: true, data } satisfies ApiResponse<T>);
 export const bad = (c: Context, error: string, status = 400) =>
-  c.json({ success: false, error } satisfies ApiResponse, { status: status as any });
+  c.json({ success: false, error } satisfies ApiResponse, status);
 export const notFound = (c: Context, error = 'not found') =>
-  c.json({ success: false, error } satisfies ApiResponse, { status: 404 as any });
+  c.json({ success: false, error } satisfies ApiResponse, 404);
 export const isStr = (value: unknown): value is string => typeof value === 'string' && value.trim().length > 0;
 
 export const parseLimit = (value: string | undefined, fallback = 20) => {

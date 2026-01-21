@@ -1,5 +1,3 @@
-import type { Env } from '../core-utils';
-
 export interface ListOptions {
   cursor?: string | null;
   limit?: number;
