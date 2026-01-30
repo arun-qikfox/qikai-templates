@@ -1,4 +1,4 @@
-import { DataStore, ListOptions, PageResult } from './types';
+import { DataStore, ListOptions, PageResult } from './types.js';
 
 export interface HttpProviderConfig {
   baseUrl: string;
@@ -99,4 +99,3 @@ export function createHttpDataStore(config: HttpProviderConfig): DataStore {
     delete: del,
   };
 }
-

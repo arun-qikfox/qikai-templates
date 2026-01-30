@@ -78,80 +78,6 @@
     "deploymentType": "client-only"
   },
   {
-    "name": "next-gcp-client-runner",
-    "language": "typescript",
-    "frameworks": [
-      "@dnd-kit",
-      "@hookform/resolvers",
-      "autoprefixer",
-      "class-variance-authority",
-      "clsx",
-      "cmdk",
-      "critters",
-      "date-fns",
-      "framer-motion",
-      "immer",
-      "input-otp",
-      "next",
-      "postcss",
-      "react",
-      "recharts",
-      "sonner",
-      "swc",
-      "swr",
-      "tailwind",
-      "typescript",
-      "vaul",
-      "zod",
-      "zustand"
-    ],
-    "description": {
-      "selection": "# Template Selection\n\nNext.js frontend-oriented template optimized for Google App Engine with minimal service requirements. Perfect for SEO-optimized landing pages, marketing sites, and content-heavy applications that benefit from server-side rendering but have minimal backend needs.\n\n## Template Constraints\n- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`.\n- If a change is required, request it instead of editing those files.\n\nUse when:\n- SEO-optimized landing pages and marketing sites\n- Content-heavy websites with server-side rendering\n- Portfolio sites and showcase applications\n- Blogs and documentation sites\n- Applications that need SSR but minimal API functionality\n- Deploying to Google App Engine with cost-effective resource usage\n\nAvoid when:\n- Heavy backend processing or complex API requirements (use full-stack template)\n- Static-only websites (use React/Vite client-only template)\n- You need Cloudflare Workers-specific features\n- Applications requiring extensive database operations\n\nNote: Optimized for Google Cloud Platform (App Engine) with minimal instance requirements. Leverages Next.js SSR capabilities while keeping resource usage low. Can include basic API routes if needed, but optimized for frontend-heavy workloads.\n\nBuilt with:\n- **Next.js (Page Router)** for server-side rendering and SEO optimization\n- **Tailwind CSS** for rapid UI development\n- **Lucide Icons** for consistent iconography\n- **Framer Motion** for animations\n- **TypeScript** and **ESLint** for type safety and code quality",
-      "usage": "# Usage instructions\n\nThis is a Next.js frontend-oriented application optimized for Google App Engine with minimal service requirements. Perfect for SEO-optimized sites that benefit from server-side rendering but have minimal backend needs.\n\n## Pages\nYou can start editing pages by modifying files in `src/pages/`. The page auto-updates as you edit the file.\n\n## API Routes (Optional)\nBasic API routes can be accessed at `/api/*`. Files in `src/pages/api/` are treated as API routes.\n\nExample API route: `src/pages/api/hello.ts` → accessible at `/api/hello`\n\nNote: This template is optimized for frontend-heavy workloads. Use API routes sparingly for simple operations only.\n\n## Architecture\n- `src/pages/`: React pages (with SSR support)\n- `src/pages/api/`: Optional basic API endpoints (use minimally)\n- `src/components/`: Reusable UI components\n- `src/lib/`: Utility functions and helpers\n- `src/styles/`: Global styles\n\n## Built with:\n- **Next.js (Page Router)** for hybrid static/server rendering and SEO optimization\n- **Tailwind CSS** for utility-first styling\n- **Lucide Icons** for modern iconography\n- **Framer Motion** for smooth animations\n- **ESLint and TypeScript** for linting and type safety\n- **ShadCN UI** for customizable and accessible UI components\n\n## Restrictions:\n- When including `tailwind.config.js`, **hardcode custom colors** directly in the config file – do **not** define them in `globals.css` unless specified\n- Next.js cannot infer props for React Components, so YOU MUST provide default props\n- Use Page router and not App router\n- Keep API routes minimal - this template is optimized for frontend workloads\n- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`\n- If a change is required, request it instead of editing those files\n\n## Styling:\n- Must generate **fully responsive** and accessible layouts\n- Use Shadcn preinstalled components rather than writing custom ones when possible\n- Use **Tailwind's spacing, layout, and typography utilities** for all components\n\n## Components:\n- All Shadcn components are available and can be imported from `@/components/ui/...`\n- Do not write custom components if shadcn components are available\n- Icons from Lucide should be imported directly from `lucide-react`\n\n## Server-Side Rendering:\n- Leverage Next.js SSR for SEO optimization\n- Use `getServerSideProps` for dynamic server-rendered content\n- Use `getStaticProps` and `getStaticPaths` for static generation when possible\n- Pages are server-rendered by default for optimal SEO\n\n## Environment Variables:\nSet these in `app.yaml` or via Google Cloud Secret Manager:\n- `NODE_ENV`: Set to `production` for production deployments\n- Add minimal environment variables as needed\n\n## Deployment:\n- **Google App Engine**: `npm run build && gcloud app deploy`\n- The Next.js build output is automatically served by App Engine\n- Optimized for minimal instance usage (F1 instance class, 0-1 instances)\n\n## Performance Optimization:\n- This template is configured for minimal resource usage\n- Use static generation (`getStaticProps`) when possible to reduce server load\n- Keep API routes simple and lightweight\n- Leverage Next.js Image optimization for better performance"
-    },
-    "supportedProviders": [
-      "gcp"
-    ],
-    "deploymentType": "client-only"
-  },
-  {
-    "name": "next-gcp-fullstack-runner",
-    "language": "typescript",
-    "frameworks": [
-      "@dnd-kit",
-      "@hookform/resolvers",
-      "autoprefixer",
-      "class-variance-authority",
-      "clsx",
-      "cmdk",
-      "critters",
-      "date-fns",
-      "framer-motion",
-      "immer",
-      "input-otp",
-      "next",
-      "postcss",
-      "react",
-      "recharts",
-      "sonner",
-      "swc",
-      "swr",
-      "tailwind",
-      "typescript",
-      "vaul",
-      "zod",
-      "zustand"
-    ],
-    "description": {
-      "selection": "# Template Selection\n\nNext.js full-stack application template optimized for Google App Engine. Perfect for applications that require both server-side rendering and API routes, with database integration and server-side logic.\n\n## Template Constraints\n- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`.\n- If a change is required, request it instead of editing those files.\n\nUse when:\n- Full-stack applications with API routes\n- Server-side rendering (SSR) requirements\n- Applications needing database connections\n- Dashboards, admin panels, and SaaS applications\n- E-commerce sites with backend processing\n- Applications requiring authentication and authorization\n- Deploying to Google App Engine with Node.js runtime\n\nAvoid when:\n- Static websites or landing pages (use client-only template)\n- You need Cloudflare Workers-specific features\n- You need direct access to Cloudflare bindings (KV, D1, Durable Objects)\n- Lightweight frontend-only projects\n\nNote: Optimized for Google Cloud Platform (App Engine) with Node.js runtime. Supports both server-side rendering and API routes. Can integrate with Firestore, Cloud SQL, or other GCP services.\n\nBuilt with:\n- **Next.js (Page Router)** for hybrid static & server rendering, built-in SEO, and routing\n- **API Routes** for backend functionality\n- **Tailwind CSS** for rapid UI development\n- **Lucide Icons** for consistent iconography\n- **Framer Motion** for animations\n- **TypeScript** and **ESLint** for type safety and code quality",
-      "usage": "# Usage instructions\n\nThis is a full-stack Next.js application optimized for Google App Engine. You can start editing pages by modifying files in `src/pages/`.\n\n## API Routes\nAPI routes can be accessed at `/api/*`. Files in `src/pages/api/` are treated as API routes.\n\nExample API route: `src/pages/api/hello.ts` → accessible at `/api/hello`\n\n## Architecture\n- `src/pages/`: React pages and API routes\n- `src/pages/api/`: Backend API endpoints\n- `src/components/`: Reusable UI components\n- `src/lib/`: Utility functions and helpers\n- `src/styles/`: Global styles\n\n## Built with:\n- **Next.js (Page Router)** for hybrid static/server rendering and SEO optimization\n- **API Routes** for backend functionality\n- **Tailwind CSS** for utility-first styling\n- **Lucide Icons** for modern iconography\n- **Framer Motion** for smooth animations\n- **ESLint and TypeScript** for linting and type safety\n- **ShadCN UI** for customizable and accessible UI components\n\n## Restrictions:\n- When including `tailwind.config.js`, **hardcode custom colors** directly in the config file – do **not** define them in `globals.css` unless specified\n- Next.js cannot infer props for React Components, so YOU MUST provide default props\n- Use Page router and not App router\n- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`\n- If a change is required, request it instead of editing those files\n\n## Styling:\n- Must generate **fully responsive** and accessible layouts\n- Use Shadcn preinstalled components rather than writing custom ones when possible\n- Use **Tailwind's spacing, layout, and typography utilities** for all components\n\n## Components:\n- All Shadcn components are available and can be imported from `@/components/ui/...`\n- Do not write custom components if shadcn components are available\n- Icons from Lucide should be imported directly from `lucide-react`\n\n## API Routes:\n- Create API routes in `src/pages/api/`\n- Use standard Next.js API route handlers\n- Can integrate with Firestore, Cloud SQL, or other GCP services\n- Access environment variables via `process.env`\n\n## Environment Variables:\nSet these in `app.yaml` or via Google Cloud Secret Manager:\n- `NODE_ENV`: Set to `production` for production deployments\n- Add your own variables for database connections, API keys, etc.\n\n## Deployment:\n- **Google App Engine**: `npm run build && gcloud app deploy`\n- The Next.js build output is automatically served by App Engine\n- API routes are handled by the Node.js runtime\n\n## Database Integration:\n- Can integrate with Firestore, Cloud SQL, or any Node.js-compatible database\n- Use environment variables for connection strings and credentials\n- Store sensitive credentials in Google Cloud Secret Manager"
-    },
-    "supportedProviders": [
-      "gcp"
-    ],
-    "deploymentType": "full-stack"
-  },
-  {
     "name": "vite-cf-DO-KV-runner",
     "language": "typescript",
     "frameworks": [
@@ -263,43 +189,6 @@
     },
     "supportedProviders": [
       "cloudflare"
-    ],
-    "deploymentType": "full-stack"
-  },
-  {
-    "name": "vite-cf-DO-v2-runner-gcp",
-    "language": "typescript",
-    "frameworks": [
-      "@dnd-kit",
-      "@hookform/resolvers",
-      "autoprefixer",
-      "class-variance-authority",
-      "clsx",
-      "cmdk",
-      "date-fns",
-      "framer-motion",
-      "hono",
-      "immer",
-      "input-otp",
-      "next",
-      "postcss",
-      "react",
-      "recharts",
-      "sonner",
-      "tailwind",
-      "tw-animate-css",
-      "typescript",
-      "vaul",
-      "vite",
-      "zod",
-      "zustand"
-    ],
-    "description": {
-      "selection": "# Template Selection\n\nGeneral-purpose full-stack application template optimized for Google Cloud App Engine with Firestore as the default data store. The backend exposes a storage abstraction that can point to Firestore or any HTTPS-accessible database (e.g., MongoDB Data API) via environment configuration.\n\n## Template Constraints\n- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`.\n- If a change is required, request it instead of editing those files.\n\nUse when:\n- Backend-heavy apps with multiple entities and server-side persistence\n- Chats, ecommerce, dashboards\n- Cost-effective persistence on Google Cloud Platform\n- General purpose storage for any multi-entity data\n- Deploying to Google App Engine (Node.js runtime)\n\nAvoid when:\n- Static/SPAs with no backend\n- SEO/SSR landing pages\n- You need Cloudflare Workers-specific features\n- You need direct access to Cloudflare bindings (KV, D1, Durable Objects)\n\nNote: Optimized for Google Cloud Platform (App Engine + Firestore). Swap data providers (e.g., MongoDB) by supplying HTTPS credentials via environment variables. The server code uses Node.js-compatible exports.\n\nBuilt with:\n- React Router, ShadCN UI, Tailwind, Lucide Icons, ESLint, Vite\n- Backend data layer with pluggable providers (`firestore` by default, `http` proxy for others)\n- Node.js-compatible server exports for Google App Engine deployment\n- Standard Vite build process (no Cloudflare-specific build tools)",
-      "usage": "# Usage\n\n## Overview\nFull-stack React + Hono starter optimized for Google Cloud App Engine with Firestore by default. The backend exposes a pluggable data store so you can swap Firestore for any HTTPS-accessible database (MongoDB Data API, Supabase REST, custom microservice) by flipping environment variables.\n\n- **Frontend**: React Router 6, ShadCN UI, Tailwind, TypeScript\n- **Backend**: Hono API running on Google App Engine (Node.js runtime)\n- **Storage**: Firestore REST integration (default) + HTTP proxy provider\n- **Shared**: Types in `shared/types.ts`\n- **Deployment Target**: Google App Engine (Node.js 20)\n\n## Important: Demo Content\nThe bundled pages, mock data, and routes are for reference only.\n- Replace `HomePage.tsx` / `DemoPage.tsx` with real UI\n- Swap out `shared/mock-data.ts` with production data structures\n- Replace demo API routes in `worker/user-routes.ts`\n\n## Architecture\n- `worker/core-utils.ts` & `worker/datastore/*`: storage configuration + provider implementations\n- `worker/entities.ts`: example repositories (users, chats) using the data store abstraction\n- `worker/user-routes.ts`: demo API routes (CRUD + messaging)\n- `src/lib/api-client.ts`: React Query client\n\n## Environment Variables\nSet these before deploying (App Engine environment variables or Secret Manager):\n\n### Firestore (default)\n- `DATA_PROVIDER=firestore`\n- `FIRESTORE_PROJECT_ID` – GCP project ID\n- `FIRESTORE_CLIENT_EMAIL` – service-account email\n- `FIRESTORE_PRIVATE_KEY_B64` – base64-encoded PEM private key (entire key file encoded once)\n- `FIRESTORE_DATABASE_ID` *(optional)* – defaults to `(default)`\n- `FIRESTORE_API_ENDPOINT` *(optional)* – override for emulator testing\n\n### HTTP provider (e.g., MongoDB Data API)\nSet `DATA_PROVIDER=http` and supply:\n- `DATA_HTTP_BASE_URL` – HTTPS endpoint exposing CRUD routes\n- `DATA_HTTP_API_KEY` *(optional)* – bearer token injected in `Authorization`\n- `DATA_HTTP_HEADERS_JSON` *(optional)* – JSON object string for additional headers\n\nSwitch providers by updating `DATA_PROVIDER`; no code changes required.\n\n## Adding Routes\nUse the data store helpers instead of talking to Firestore directly:\n\n```ts\nimport { ok, bad } from './core-utils';\nimport { createUser } from './entities';\n\napp.post('/api/users', async (c) => {\n  const { name } = await c.req.json<{ name?: string }>();\n  if (!name?.trim()) return bad(c, 'name required');\n  const user = await createUser(c.env, { id: crypto.randomUUID(), name: name.trim() });\n  return ok(c, user);\n});\n```\n\n## Firestore Notes\n- Service account keys should be stored as **secrets** (Google Cloud Secret Manager) not committed to git.\n- `FIRESTORE_PRIVATE_KEY_B64` must include the full PEM (header + footer) before encoding.\n- Firestore REST API is used; requests are signed and cached per instance.\n- `entities.ts` shows how to seed collections and run CRUD operations.\n- Configure secrets in App Engine: `gcloud app deploy --update-secrets`\n\n## Styling & Frontend\n- Keep Tailwind customization in `tailwind.config.js`\n- Prefer provided ShadCN components; use React Query for async data\n- Handle loading/error states in the UI\n- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`. Request changes instead of editing them.\n\n### Theme & Color System\n- `src/components/theme-provider.tsx` and the bundled mode toggle (in the navbar layout) already handle light/dark switching—reuse them whenever you restructure the shell. If you remove the stock header, add an obvious toggle back in Phase 1.\n- Light mode is the primary spec, but dark mode must ship simultaneously. Use Tailwind `dark:` modifiers and the CSS variables (`--background`, `--foreground`, etc.) defined in `src/styles/globals.css` so both themes stay synchronized.\n- Avoid hard-coded text/background colors inside components. Introduce semantic tokens (e.g., `--brand-primary`, `--surface-muted`) through Tailwind or CSS variables and apply them consistently across both themes.\n- QA every scene (landing, dashboard, bookings, settings) in both modes before completing a phase to catch low-contrast or washed-out states early.\n\n## Deployment\n- **Google App Engine**: `npm run build && gcloud app deploy`\n- Ensure environment variables are configured in `app.yaml` or via Secret Manager\n- The server exports the Hono app for Node.js runtime compatibility\n\n## Custom Providers\n- Implement your own HTTPS service that accepts the same payloads (`DataStore` interface).\n- Use `DATA_PROVIDER=http` plus headers/keys to point the template at your service.\n\nThis approach keeps Google Cloud as the default while remaining declarative and flexible for other databases."
-    },
-    "supportedProviders": [
-      "gcp"
     ],
     "deploymentType": "full-stack"
   },

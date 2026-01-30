@@ -1,0 +1,9 @@
+{
+  "files": [
+    "worker/index.ts",
+    "worker/user-routes.ts",
+    "server.ts"
+  ],
+  "description": "Files required for server compilation in GCP fullstack deployments - must be present before TypeScript compilation"
+}
+

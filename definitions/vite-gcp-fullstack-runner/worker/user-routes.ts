@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import type { Env } from './core-utils';
+import type { Env } from './core-utils.js';
 import {
   ensureUserSeed,
   listUsers,
@@ -13,9 +13,9 @@ import {
   deleteManyChats,
   listChatMessages,
   appendChatMessage,
-} from './entities';
-import { ok, bad, notFound, isStr, parseLimit } from './core-utils';
-import type { ChatBoardState } from './entities';
+} from './entities.js';
+import { ok, bad, notFound, isStr, parseLimit } from './core-utils.js';
+import type { ChatBoardState } from './entities.js';
 import type { User, ChatMessage } from '@shared/types';
 
 export function userRoutes(app: Hono<{ Bindings: Env }>) {

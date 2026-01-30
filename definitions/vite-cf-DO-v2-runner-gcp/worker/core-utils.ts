@@ -1,8 +1,8 @@
 import type { Context } from 'hono';
 import type { ApiResponse } from '@shared/types';
-import { createFirestoreStore, type FirestoreConfig } from './datastore/firestore';
-import { createHttpDataStore, type HttpProviderConfig } from './datastore/http';
-import type { DataStore } from './datastore/types';
+import { createFirestoreStore, type FirestoreConfig } from './datastore/firestore.js';
+import { createHttpDataStore, type HttpProviderConfig } from './datastore/http.js';
+import type { DataStore } from './datastore/types.js';
 
 export type DataProviderTarget = 'firestore' | 'http';
 
@@ -85,7 +85,11 @@ export function createDataStore(env: Env): DataStore {
 }
 
 export const ok = <T>(c: Context, data: T) => c.json({ success: true, data } satisfies ApiResponse<T>);
-export const bad = (c: Context, error: string, status = 400) =>
+export const bad = (
+  c: Context,
+  error: string,
+  status: 400 | 401 | 403 | 404 | 409 | 422 | 500 = 400,
+) =>
   c.json({ success: false, error } satisfies ApiResponse, status);
 export const notFound = (c: Context, error = 'not found') =>
   c.json({ success: false, error } satisfies ApiResponse, 404);
@@ -97,4 +101,3 @@ export const parseLimit = (value: string | undefined, fallback = 20) => {
   if (Number.isNaN(parsed) || parsed <= 0) return fallback;
   return Math.min(parsed, 100);
 };
-

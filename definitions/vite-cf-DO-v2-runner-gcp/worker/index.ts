@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
-import { userRoutes } from './user-routes';
-import type { Env } from './core-utils';
+import { userRoutes } from './user-routes.js';
+import type { Env } from './core-utils.js';
 
 export interface ClientErrorReport {
   message: string;

@@ -1,4 +1,4 @@
-import { ListOptions, PageResult, DataStore } from './types';
+import { ListOptions, PageResult, DataStore } from './types.js';
 
 export interface FirestoreConfig {
   projectId: string;
@@ -150,7 +150,7 @@ async function getAccessToken(config: FirestoreConfig): Promise<string> {
     throw new Error(`Failed to obtain Google access token: ${response.status} ${response.statusText} - ${errorText}`);
   }
 
-  const json = await response.json<{ access_token: string; expires_in: number }>();
+  const json = (await response.json()) as { access_token: string; expires_in: number };
   const token = json.access_token;
   tokenCache.set(cacheKey, { token, expiresAt: now + (json.expires_in * 1000) });
   return token;
@@ -320,4 +320,3 @@ export function createFirestoreStore(config: FirestoreConfig): DataStore {
     delete: del,
   };
 }
-

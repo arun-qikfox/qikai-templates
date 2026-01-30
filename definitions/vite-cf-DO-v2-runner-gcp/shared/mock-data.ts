@@ -1,4 +1,4 @@
-import type { User, Chat, ChatMessage } from './types';
+import type { User, Chat, ChatMessage } from './types.js';
 
 export const MOCK_USERS: User[] = [
   { id: 'u1', name: 'User A' },

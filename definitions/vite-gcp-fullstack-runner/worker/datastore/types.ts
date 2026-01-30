@@ -29,6 +29,5 @@ export interface DataStore {
 }
 
 export interface StoreFactory {
-  (env: Env): DataStore;
+  <Env = unknown>(env: Env): DataStore;
 }
-

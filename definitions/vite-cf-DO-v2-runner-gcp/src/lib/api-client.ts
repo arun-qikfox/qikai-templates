@@ -1,4 +1,4 @@
-import { ApiResponse } from "../../shared/types"
+import { ApiResponse } from "../../shared/types.js"
 
 export async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(path, { headers: { 'Content-Type': 'application/json' }, ...init })
