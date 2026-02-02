@@ -19,7 +19,7 @@ import type { ChatBoardState } from './entities.js';
 import type { User, ChatMessage } from '@shared/types';
 
 export function userRoutes(app: Hono<{ Bindings: Env }>) {
-  app.get('/api/test', (c) => c.json({ success: true, data: { name: 'GCP Firestore Demo' } }));
+  app.get('/api/test', (c) => c.json({ success: true, data: { name: 'GCP Datastore Demo' } }));
 
   // USERS
   app.get('/api/users', async (c) => {

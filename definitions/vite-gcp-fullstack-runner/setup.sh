@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Setup script for the Google Cloud Firestore default template
+# Setup script for the Google Cloud Datastore default template
 # Usage: ./setup.sh <new-project-name>
 
 set -e  # Exit on any error
@@ -13,7 +13,7 @@ if [ $# -eq 0 ]; then
 fi
 
 NEW_PROJECT_NAME="$1"
-echo "Setting up Firestore-ready project: $NEW_PROJECT_NAME"
+echo "Setting up Datastore-ready project: $NEW_PROJECT_NAME"
 
 # Update project name in package.json if needed
 if command -v jq >/dev/null 2>&1; then
@@ -30,5 +30,5 @@ echo ""
 echo "Next steps:"
 echo "1. npm install (or bun install)"
 echo "2. npm run dev (to start development server)"
-echo "3. Configure environment variables (FIRESTORE_PROJECT_ID, FIRESTORE_CLIENT_EMAIL, FIRESTORE_PRIVATE_KEY_B64, etc.)"
+echo "3. Configure environment variables if needed (GCP_PROJECT_ID optional—ADC auto-detects on App Engine)"
 echo "4. npm run deploy (when ready to deploy)"

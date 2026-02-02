@@ -1,13 +1,17 @@
 import type { Context } from 'hono';
 import type { ApiResponse } from '@shared/types';
+import { createDatastoreStore } from './datastore/datastore.js';
 import { createFirestoreStore, type FirestoreConfig } from './datastore/firestore.js';
 import { createHttpDataStore, type HttpProviderConfig } from './datastore/http.js';
 import type { DataStore } from './datastore/types.js';
+import { DEFAULT_DATA_PROVIDER } from '@shared/config.js';
 
-export type DataProviderTarget = 'firestore' | 'http';
+export type DataProviderTarget = 'datastore' | 'firestore' | 'http';
 
 export interface Env {
   DATA_PROVIDER?: string;
+  GCP_PROJECT_ID?: string;
+  GOOGLE_CLOUD_PROJECT?: string;
   FIRESTORE_PROJECT_ID?: string;
   FIRESTORE_CLIENT_EMAIL?: string;
   FIRESTORE_PRIVATE_KEY_B64?: string;
@@ -19,9 +23,10 @@ export interface Env {
 }
 
 function parseProvider(env: Env): DataProviderTarget {
-  const specified = env.DATA_PROVIDER?.toLowerCase().trim();
+  const specified = (env.DATA_PROVIDER ?? DEFAULT_DATA_PROVIDER).toLowerCase().trim();
   if (specified === 'http') return 'http';
-  return 'firestore';
+  if (specified === 'firestore') return 'firestore';
+  return 'datastore';
 }
 
 function parseAdditionalHeaders(json?: string): Record<string, string> | undefined {
@@ -41,6 +46,15 @@ function parseAdditionalHeaders(json?: string): Record<string, string> | undefin
   return undefined;
 }
 
+function resolveDatastoreConfig(env: Env): { projectId?: string } {
+  const projectId =
+    env.GCP_PROJECT_ID?.trim() ??
+    env.GOOGLE_CLOUD_PROJECT?.trim() ??
+    env.FIRESTORE_PROJECT_ID?.trim() ??
+    '';
+  return projectId ? { projectId } : {};
+}
+
 function resolveFirestoreConfig(env: Env): FirestoreConfig {
   const projectId = env.FIRESTORE_PROJECT_ID?.trim();
   const clientEmail = env.FIRESTORE_CLIENT_EMAIL?.trim();
@@ -48,7 +62,7 @@ function resolveFirestoreConfig(env: Env): FirestoreConfig {
 
   if (!projectId || !clientEmail || !privateKeyPemB64) {
     throw new Error(
-      'Firestore configuration is incomplete. Ensure FIRESTORE_PROJECT_ID, FIRESTORE_CLIENT_EMAIL, and FIRESTORE_PRIVATE_KEY_B64 are set.',
+      'Firestore configuration is incomplete. Ensure FIRESTORE_PROJECT_ID, FIRESTORE_CLIENT_EMAIL, and FIRESTORE_PRIVATE_KEY_B64 are set. For GCP deployments, prefer DATA_PROVIDER=datastore which uses Application Default Credentials.',
     );
   }
 
@@ -81,7 +95,10 @@ export function createDataStore(env: Env): DataStore {
   if (provider === 'http') {
     return createHttpDataStore(resolveHttpConfig(env));
   }
-  return createFirestoreStore(resolveFirestoreConfig(env));
+  if (provider === 'firestore') {
+    return createFirestoreStore(resolveFirestoreConfig(env));
+  }
+  return createDatastoreStore(resolveDatastoreConfig(env));
 }
 
 export const ok = <T>(c: Context, data: T) => c.json({ success: true, data } satisfies ApiResponse<T>);

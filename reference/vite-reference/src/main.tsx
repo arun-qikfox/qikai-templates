@@ -15,12 +15,15 @@ import { HomePage } from '@/pages/HomePage'
 // Suppress Vite HMR WebSocket errors in preview environments
 // These errors occur when HMR tries to connect but the connection fails (non-critical)
 if (import.meta.env.DEV && import.meta.hot) {
-  import.meta.hot.on('vite:error', (error) => {
+  import.meta.hot.on('vite:error', (error: unknown) => {
     // Suppress HMR errors in preview - not critical for functionality
     // Page will still work, just without hot module replacement
-    if (error.message && (
-      error.message.includes('failed to connect to websocket') ||
-      error.message.includes('WebSocket connection')
+    const message = error && typeof error === 'object' && 'message' in error
+      ? String((error as { message: unknown }).message)
+      : '';
+    if (message && (
+      message.includes('failed to connect to websocket') ||
+      message.includes('WebSocket connection')
     )) {
       console.warn('[HMR] Connection issue - page will refresh on file changes if available');
       return;

@@ -152,6 +152,7 @@ excludes:
   - `.gitignore`, `.important_files.json`, `package.json`, `wrangler.jsonc`, `tsconfig.*.json`
   - `src/*` files that differ from the base reference
   - `worker/*` files for Workers-based templates
+  - **GCP full-stack**: `server.ts`, `worker/*`, `shared/*`, `app.yaml`, `.gcloudignore` — see [GCP Full-Stack Template Standards](#gcp-full-stack-template-standards)
 
 3) Generate and verify:
 ```bash
@@ -200,6 +201,68 @@ This script will scan the generated templates and collate metadata and documenta
 - Maintain parity with `originals/` by running verification when templates change.
 - Avoid `any` in TypeScript. Prefer strict typing across templates.
 - Keep README content inside each template minimal; the global catalog summarizes key usage and selection guidelines.
+
+
+## GCP Full-Stack Template Standards
+
+Templates targeting Google App Engine (GCP) full-stack deployment **must** follow these standards to ensure correct bundling and avoid 500/503 errors at runtime.
+
+### 1. Server Entry Point (`server.ts`)
+
+- **Use static import** for the backend — never dynamic `import()` at runtime.
+- Import the Hono app from `./worker/index.js` with explicit `.js` extension (Node ESM requirement).
+
+```typescript
+import { serve } from '@hono/node-server';
+import { app } from './worker/index.js';
+
+const port = Number(process.env.PORT ?? process.env.SERVICE_PORT ?? 8080);
+
+serve({ fetch: app.fetch, port }, (info) => {
+  console.log(`[server] listening on http://localhost:${info.port}`);
+});
+```
+
+- **Why**: The deployment pipeline bundles `server.ts` + `worker/**` into a single `dist/server.js` using esbuild. Static imports allow the bundler to inline all code and eliminate runtime `ERR_MODULE_NOT_FOUND` and `ERR_UNSUPPORTED_DIR_IMPORT` errors.
+
+### 2. Worker Entry Point (`worker/index.ts`)
+
+- **Export the Hono app** as a named export: `export { app }`.
+- The worker is the backend (API routes, Hono app); it runs in Node.js via `@hono/node-server`, not in Cloudflare Workers.
+
+```typescript
+// worker/index.ts
+import { Hono } from 'hono';
+// ... routes, middleware, etc.
+export const app = new Hono();
+export { app };
+```
+
+### 3. Path Aliases (`@shared/*`)
+
+- Worker code may use `@shared/*` for types and utilities (e.g. `@shared/types`, `@shared/mock-data`).
+- The bundler resolves `@shared` → `./shared` via `--alias:@shared=./shared`.
+- Ensure `shared/` contains the expected types and mock data.
+
+### 4. Build Output
+
+- Frontend: `vite build` or `build:client` → `dist/client/`
+- Backend: esbuild bundles `server.ts` + `worker/**` → `dist/server.js`
+- App Engine runs `node dist/server.js` as the entry point.
+
+### 5. Environment Variables & Fallbacks
+
+- **Always use fallback constants**: `process.env.X ?? DEFAULT_X`. Never use raw `process.env.X` without a fallback.
+- **Centralize defaults** in `shared/config.ts` (e.g. `DEFAULT_PORT`, `DEFAULT_DATA_PROVIDER`).
+- **Datastore (default)**: Uses Application Default Credentials (ADC) when running on GCP. No service account keys required.
+- **Firestore**: When explicitly selected, requires `FIRESTORE_PROJECT_ID`, `FIRESTORE_CLIENT_EMAIL`, `FIRESTORE_PRIVATE_KEY_B64`.
+
+### Reference Implementation
+
+See `definitions/vite-gcp-fullstack-runner/` for a complete reference:
+- `server.ts` — static import from `./worker/index.js`
+- `worker/index.ts` — exports `{ app }`
+- `tsconfig.server.json` — paths for `@shared/*` (used if tsc fallback is needed)
 
 
 ## Troubleshooting

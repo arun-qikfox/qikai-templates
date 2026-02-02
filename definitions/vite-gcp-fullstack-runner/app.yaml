@@ -7,8 +7,6 @@ automatic_scaling:
   max_instances: 1
 
 env_variables:
-  DATA_PROVIDER: firestore
-  FIRESTORE_PROJECT_ID: ""
-  FIRESTORE_CLIENT_EMAIL: ""
-  FIRESTORE_DATABASE_ID: "(default)"
+  DATA_PROVIDER: datastore
+  GCP_PROJECT_ID: ""
 

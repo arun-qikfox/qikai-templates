@@ -1,11 +1,11 @@
 # Usage
 
 ## Overview
-Full-stack React + Hono starter optimized for Google Cloud App Engine with Firestore by default. The backend exposes a pluggable data store so you can swap Firestore for any HTTPS-accessible database (MongoDB Data API, Supabase REST, custom microservice) by flipping environment variables.
+Full-stack React + Hono starter optimized for Google Cloud App Engine with Google Cloud Datastore by default. The backend exposes a pluggable data store so you can swap Datastore for Firestore or any HTTPS-accessible database (MongoDB Data API, Supabase REST, custom microservice) by flipping environment variables.
 
 - **Frontend**: React Router 6, ShadCN UI, Tailwind, TypeScript
 - **Backend**: Hono API running on Google App Engine (Node.js runtime)
-- **Storage**: Firestore REST integration (default) + HTTP proxy provider
+- **Storage**: Google Cloud Datastore (default, uses ADC) + Firestore REST + HTTP proxy provider
 - **Shared**: Types in `shared/types.ts`
 - **Deployment Target**: Google App Engine (Node.js 20)
 
@@ -22,9 +22,14 @@ The bundled pages, mock data, and routes are for reference only.
 - `src/lib/api-client.ts`: React Query client
 
 ## Environment Variables
-Set these before deploying (App Engine environment variables or Secret Manager):
+Set these before deploying (App Engine environment variables or Secret Manager). **Always use fallbacks**: `process.env.X ?? DEFAULT_X`.
 
-### Firestore (default)
+### Datastore (default – uses Application Default Credentials)
+- `DATA_PROVIDER=datastore` (or omit – Datastore is default)
+- `GCP_PROJECT_ID` or `GOOGLE_CLOUD_PROJECT` *(optional)* – when running on App Engine, ADC auto-detects the project
+- No service account keys required when deployed to GCP; ADC is used automatically
+
+### Firestore (explicit – requires service account keys)
 - `DATA_PROVIDER=firestore`
 - `FIRESTORE_PROJECT_ID` – GCP project ID
 - `FIRESTORE_CLIENT_EMAIL` – service-account email
@@ -44,7 +49,7 @@ Switch providers by updating `DATA_PROVIDER`; no code changes required.
 In `worker/` and any server-side code, **always use explicit `.js` extensions** in relative imports so Node ESM resolves modules after TypeScript compilation (e.g. `from './user-routes.js'`, `from './core-utils.js'`). Do not use extensionless relative imports in backend code.
 
 ## Adding Routes
-Use the data store helpers instead of talking to Firestore directly:
+Use the data store helpers instead of talking to Datastore/Firestore directly:
 
 ```ts
 import { ok, bad } from './core-utils.js';
@@ -58,10 +63,10 @@ app.post('/api/users', async (c) => {
 });
 ```
 
-## Firestore Notes
-- Service account keys should be stored as **secrets** (Google Cloud Secret Manager) not committed to git.
+## Datastore & Firestore Notes
+- **Datastore (default)**: Uses Application Default Credentials (ADC) when running on GCP. No service account keys needed for App Engine deployments.
+- **Firestore**: When `DATA_PROVIDER=firestore`, service account keys must be provided. Store keys as **secrets** (Google Cloud Secret Manager) not committed to git.
 - `FIRESTORE_PRIVATE_KEY_B64` must include the full PEM (header + footer) before encoding.
-- Firestore REST API is used; requests are signed and cached per instance.
 - `entities.ts` shows how to seed collections and run CRUD operations.
 - Configure secrets in App Engine: `gcloud app deploy --update-secrets`
 
