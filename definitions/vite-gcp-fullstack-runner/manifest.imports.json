@@ -1,0 +1,47 @@
+{
+  "packages": {
+    "@/lib/errorReporter": {
+      "importStyle": "named",
+      "exports": ["errorReporter"],
+      "invalidExports": ["errorBoundary", "source", "error", "errorBoundaryProps", "level"],
+      "notes": "errorReporter.report() accepts only: message, stack, componentStack, url, userAgent, timestamp. Never pass errorBoundary, source, error, errorBoundaryProps, or level."
+    },
+    "zustand": {
+      "importStyle": "named",
+      "exports": ["create", "useStore"],
+      "notes": "Named imports only. Use: import { create } from 'zustand'. No default export."
+    },
+    "@tanstack/react-query": {
+      "importStyle": "named",
+      "apiVersion": "v5",
+      "querySignature": "options",
+      "notes": "v5 API: useQuery({ queryKey, queryFn }). When using useQuery, ensure main.tsx wraps the app with <QueryClientProvider client={queryClient}>."
+    },
+    "lucide-react": {
+      "importStyle": "named",
+      "iconReplacements": { "Airplane": "Plane", "Template": "FileText" },
+      "notes": "All icons named. Airplane→Plane, Template→FileText."
+    },
+    "zod": {
+      "importStyle": "named",
+      "exports": ["z"],
+      "invalidExports": ["Filter"],
+      "notes": "Import { z }. Use z.object(). NEVER import Filter."
+    },
+    "@radix-ui/react-slider": {
+      "importStyle": "named",
+      "exports": ["Slider"],
+      "invalidExports": ["SliderTrack", "SliderRange", "SliderThumb"],
+      "notes": "Only import { Slider }. Never SliderTrack, SliderRange, SliderThumb."
+    },
+    "react-flow": {
+      "importStyle": "named",
+      "notes": "Named exports only. No default import."
+    },
+    "uuid": {
+      "importStyle": "named",
+      "exports": ["v4", "v1"],
+      "notes": "Use { v4 } from 'uuid' for IDs. Not nanoid."
+    }
+  }
+}
