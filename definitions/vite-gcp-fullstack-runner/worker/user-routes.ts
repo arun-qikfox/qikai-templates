@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import type { Env } from './core-utils.js';
+import type { Env } from './core-utils.ts';
 import {
   ensureUserSeed,
   listUsers,
@@ -13,10 +13,10 @@ import {
   deleteManyChats,
   listChatMessages,
   appendChatMessage,
-} from './entities.js';
-import { ok, bad, notFound, isStr, parseLimit } from './core-utils.js';
-import type { ChatBoardState } from './entities.js';
-import type { User, ChatMessage } from '@shared/types';
+} from './entities.ts';
+import { ok, bad, notFound, isStr, parseLimit } from './core-utils.ts';
+import type { ChatBoardState } from './entities.ts';
+import type { User, ChatMessage } from '../shared/types.ts';
 
 export function userRoutes(app: Hono<{ Bindings: Env }>) {
   app.get('/api/test', (c) => c.json({ success: true, data: { name: 'GCP Datastore Demo' } }));

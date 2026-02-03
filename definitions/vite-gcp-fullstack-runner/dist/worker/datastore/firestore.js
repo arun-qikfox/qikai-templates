@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createFirestoreStore = createFirestoreStore;
 const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
 const DEFAULT_DATABASE = '(default)';
@@ -84,7 +87,7 @@ async function getAccessToken(config) {
         const errorText = await response.text();
         throw new Error(`Failed to obtain Google access token: ${response.status} ${response.statusText} - ${errorText}`);
     }
-    const json = await response.json();
+    const json = (await response.json());
     const token = json.access_token;
     tokenCache.set(cacheKey, { token, expiresAt: now + (json.expires_in * 1000) });
     return token;
@@ -172,7 +175,7 @@ async function firestoreFetch(config, path, init = {}) {
     }
     return response;
 }
-export function createFirestoreStore(config) {
+function createFirestoreStore(config) {
     const list = async (collection, options) => {
         const params = new URLSearchParams();
         if (options?.limit)

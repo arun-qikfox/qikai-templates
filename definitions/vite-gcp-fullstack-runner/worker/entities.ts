@@ -1,7 +1,7 @@
-import type { User, Chat, ChatMessage } from '@shared/types';
-import { MOCK_CHAT_MESSAGES, MOCK_CHATS, MOCK_USERS } from '../shared/mock-data.js';
-import { createDataStore, type Env } from './core-utils.js';
-import type { PageResult } from './datastore/types.js';
+import type { User, Chat, ChatMessage } from '../shared/types.ts';
+import { MOCK_CHAT_MESSAGES, MOCK_CHATS, MOCK_USERS } from '../shared/mock-data.ts';
+import { createDataStore, type Env } from './core-utils.ts';
+import type { PageResult } from './datastore/types.ts';
 
 const USERS_COLLECTION = 'users';
 const CHATS_COLLECTION = 'chats';

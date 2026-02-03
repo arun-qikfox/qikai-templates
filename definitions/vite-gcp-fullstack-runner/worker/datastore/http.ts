@@ -1,4 +1,4 @@
-import { DataStore, ListOptions, PageResult } from './types.js';
+import type { DataStore, ListOptions, PageResult } from './types.ts';
 
 export interface HttpProviderConfig {
   baseUrl: string;

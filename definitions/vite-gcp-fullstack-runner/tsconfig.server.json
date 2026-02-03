@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -15,7 +15,7 @@
       "@shared/*": ["./shared/*"]
     }
   },
-  "include": ["server.ts", "worker/**/*"],
+  "include": ["server.ts", "worker/**/*", "shared/**/*"],
   "exclude": ["node_modules", "dist", "src"]
 }
 

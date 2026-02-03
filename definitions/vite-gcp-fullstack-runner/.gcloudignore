@@ -10,6 +10,11 @@
 !/dist/client/
 !/dist/client/**
 !/dist/server.js
+!/dist/package.json
+!/dist/worker/
+!/dist/worker/**
+!/dist/shared/
+!/dist/shared/**
 !/dist/**/*.js
 
 # Include server entry points
@@ -19,6 +24,8 @@
 # Include deployment metadata
 !/app.yaml
 !/package.json
+!/package-lock.json
+!/bun.lock
 !/.gcloudignore
 
 # include runtime configs

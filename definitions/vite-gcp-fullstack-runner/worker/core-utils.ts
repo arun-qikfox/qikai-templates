@@ -1,10 +1,10 @@
 import type { Context } from 'hono';
-import type { ApiResponse } from '@shared/types';
-import { createDatastoreStore } from './datastore/datastore.js';
-import { createFirestoreStore, type FirestoreConfig } from './datastore/firestore.js';
-import { createHttpDataStore, type HttpProviderConfig } from './datastore/http.js';
-import type { DataStore } from './datastore/types.js';
-import { DEFAULT_DATA_PROVIDER } from '@shared/config.js';
+import type { ApiResponse } from '../shared/types.ts';
+import { createDatastoreStore } from './datastore/datastore.ts';
+import { createFirestoreStore, type FirestoreConfig } from './datastore/firestore.ts';
+import { createHttpDataStore, type HttpProviderConfig } from './datastore/http.ts';
+import type { DataStore } from './datastore/types.ts';
+import { DEFAULT_DATA_PROVIDER } from '../shared/config.ts';
 
 export type DataProviderTarget = 'datastore' | 'firestore' | 'http';
 

@@ -46,14 +46,14 @@ Set `DATA_PROVIDER=http` and supply:
 Switch providers by updating `DATA_PROVIDER`; no code changes required.
 
 ## Backend / Worker Imports (Node ESM)
-In `worker/` and any server-side code, **always use explicit `.js` extensions** in relative imports so Node ESM resolves modules after TypeScript compilation (e.g. `from './user-routes.js'`, `from './core-utils.js'`). Do not use extensionless relative imports in backend code.
+In `worker/` and any server-side code, **always use explicit `.ts` extensions** in relative imports for Node 24 native TypeScript (e.g. `from './user-routes.ts'`, `from './core-utils.ts'`). Do not use extensionless relative imports in backend code.
 
 ## Adding Routes
 Use the data store helpers instead of talking to Datastore/Firestore directly:
 
 ```ts
-import { ok, bad } from './core-utils.js';
-import { createUser } from './entities.js';
+import { ok, bad } from './core-utils.ts';
+import { createUser } from './entities.ts';
 
 app.post('/api/users', async (c) => {
   const { name } = await c.req.json<{ name?: string }>();

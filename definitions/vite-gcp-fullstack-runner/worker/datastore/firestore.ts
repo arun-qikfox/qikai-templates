@@ -1,4 +1,4 @@
-import { ListOptions, PageResult, DataStore } from './types.js';
+import type { ListOptions, PageResult, DataStore } from './types.ts';
 
 export interface FirestoreConfig {
   projectId: string;

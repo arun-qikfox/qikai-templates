@@ -1,51 +1,54 @@
-import { ensureUserSeed, listUsers, createUser, deleteUser, deleteManyUsers, ensureChatSeed, listChats, createChat, deleteChat, deleteManyChats, listChatMessages, appendChatMessage, } from './entities';
-import { ok, bad, notFound, isStr, parseLimit } from './core-utils';
-export function userRoutes(app) {
-    app.get('/api/test', (c) => c.json({ success: true, data: { name: 'GCP Firestore Demo' } }));
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.userRoutes = userRoutes;
+const entities_js_1 = require("./entities.js");
+const core_utils_js_1 = require("./core-utils.js");
+function userRoutes(app) {
+    app.get('/api/test', (c) => c.json({ success: true, data: { name: 'GCP Datastore Demo' } }));
     // USERS
     app.get('/api/users', async (c) => {
-        await ensureUserSeed(c.env);
+        await (0, entities_js_1.ensureUserSeed)(c.env);
         const cursor = c.req.query('cursor');
-        const limit = parseLimit(c.req.query('limit'));
-        const page = await listUsers(c.env, { cursor: cursor ?? null, limit });
-        return ok(c, page);
+        const limit = (0, core_utils_js_1.parseLimit)(c.req.query('limit'));
+        const page = await (0, entities_js_1.listUsers)(c.env, { cursor: cursor ?? null, limit });
+        return (0, core_utils_js_1.ok)(c, page);
     });
     app.post('/api/users', async (c) => {
         const { name } = (await c.req.json());
         if (!name?.trim())
-            return bad(c, 'name required');
+            return (0, core_utils_js_1.bad)(c, 'name required');
         const user = { id: crypto.randomUUID(), name: name.trim() };
-        return ok(c, await createUser(c.env, user));
+        return (0, core_utils_js_1.ok)(c, await (0, entities_js_1.createUser)(c.env, user));
     });
     // CHATS
     app.get('/api/chats', async (c) => {
-        await ensureChatSeed(c.env);
+        await (0, entities_js_1.ensureChatSeed)(c.env);
         const cursor = c.req.query('cursor');
-        const limit = parseLimit(c.req.query('limit'));
-        const page = await listChats(c.env, { cursor: cursor ?? null, limit });
-        return ok(c, page);
+        const limit = (0, core_utils_js_1.parseLimit)(c.req.query('limit'));
+        const page = await (0, entities_js_1.listChats)(c.env, { cursor: cursor ?? null, limit });
+        return (0, core_utils_js_1.ok)(c, page);
     });
     app.post('/api/chats', async (c) => {
         const { title } = (await c.req.json());
         if (!title?.trim())
-            return bad(c, 'title required');
+            return (0, core_utils_js_1.bad)(c, 'title required');
         const chat = { id: crypto.randomUUID(), title: title.trim(), messages: [] };
-        const created = await createChat(c.env, chat);
-        return ok(c, { id: created.id, title: created.title });
+        const created = await (0, entities_js_1.createChat)(c.env, chat);
+        return (0, core_utils_js_1.ok)(c, { id: created.id, title: created.title });
     });
     // MESSAGES
     app.get('/api/chats/:chatId/messages', async (c) => {
         const chatId = c.req.param('chatId');
-        const messages = await listChatMessages(c.env, chatId);
+        const messages = await (0, entities_js_1.listChatMessages)(c.env, chatId);
         if (messages === null)
-            return notFound(c, 'chat not found');
-        return ok(c, messages);
+            return (0, core_utils_js_1.notFound)(c, 'chat not found');
+        return (0, core_utils_js_1.ok)(c, messages);
     });
     app.post('/api/chats/:chatId/messages', async (c) => {
         const chatId = c.req.param('chatId');
         const { userId, text } = (await c.req.json());
-        if (!isStr(userId) || !text?.trim())
-            return bad(c, 'userId and text required');
+        if (!(0, core_utils_js_1.isStr)(userId) || !text?.trim())
+            return (0, core_utils_js_1.bad)(c, 'userId and text required');
         const message = {
             id: crypto.randomUUID(),
             chatId,
@@ -54,35 +57,35 @@ export function userRoutes(app) {
             ts: Date.now(),
         };
         try {
-            const created = await appendChatMessage(c.env, chatId, message);
-            return ok(c, created);
+            const created = await (0, entities_js_1.appendChatMessage)(c.env, chatId, message);
+            return (0, core_utils_js_1.ok)(c, created);
         }
         catch {
-            return notFound(c, 'chat not found');
+            return (0, core_utils_js_1.notFound)(c, 'chat not found');
         }
     });
     // DELETE: Users
     app.delete('/api/users/:id', async (c) => {
         const id = c.req.param('id');
-        return ok(c, { id, deleted: await deleteUser(c.env, id) });
+        return (0, core_utils_js_1.ok)(c, { id, deleted: await (0, entities_js_1.deleteUser)(c.env, id) });
     });
     app.post('/api/users/deleteMany', async (c) => {
         const { ids } = (await c.req.json());
-        const list = ids?.filter(isStr) ?? [];
+        const list = ids?.filter(core_utils_js_1.isStr) ?? [];
         if (list.length === 0)
-            return bad(c, 'ids required');
-        return ok(c, { deletedCount: await deleteManyUsers(c.env, list), ids: list });
+            return (0, core_utils_js_1.bad)(c, 'ids required');
+        return (0, core_utils_js_1.ok)(c, { deletedCount: await (0, entities_js_1.deleteManyUsers)(c.env, list), ids: list });
     });
     // DELETE: Chats
     app.delete('/api/chats/:id', async (c) => {
         const id = c.req.param('id');
-        return ok(c, { id, deleted: await deleteChat(c.env, id) });
+        return (0, core_utils_js_1.ok)(c, { id, deleted: await (0, entities_js_1.deleteChat)(c.env, id) });
     });
     app.post('/api/chats/deleteMany', async (c) => {
         const { ids } = (await c.req.json());
-        const list = ids?.filter(isStr) ?? [];
+        const list = ids?.filter(core_utils_js_1.isStr) ?? [];
         if (list.length === 0)
-            return bad(c, 'ids required');
-        return ok(c, { deletedCount: await deleteManyChats(c.env, list), ids: list });
+            return (0, core_utils_js_1.bad)(c, 'ids required');
+        return (0, core_utils_js_1.ok)(c, { deletedCount: await (0, entities_js_1.deleteManyChats)(c.env, list), ids: list });
     });
 }

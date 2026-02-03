@@ -1,5 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createHttpDataStore = createHttpDataStore;
 const JSON_CONTENT_TYPE = 'application/json';
-export function createHttpDataStore(config) {
+function createHttpDataStore(config) {
     const request = async (path, init = {}) => {
         const url = `${config.baseUrl.replace(/\/+$/, '')}/${path.replace(/^\/+/, '')}`;
         const headers = {

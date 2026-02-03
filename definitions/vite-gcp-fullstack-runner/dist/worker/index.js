@@ -1,11 +1,15 @@
-import { Hono } from 'hono';
-import { cors } from 'hono/cors';
-import { logger } from 'hono/logger';
-import { userRoutes } from './user-routes';
-const app = new Hono();
-app.use('*', logger());
-app.use('/api/*', cors({ origin: '*', allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], allowHeaders: ['Content-Type', 'Authorization'] }));
-userRoutes(app);
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.app = void 0;
+const hono_1 = require("hono");
+const cors_1 = require("hono/cors");
+const logger_1 = require("hono/logger");
+const user_routes_js_1 = require("./user-routes.js");
+const app = new hono_1.Hono();
+exports.app = app;
+app.use('*', (0, logger_1.logger)());
+app.use('/api/*', (0, cors_1.cors)({ origin: '*', allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], allowHeaders: ['Content-Type', 'Authorization'] }));
+(0, user_routes_js_1.userRoutes)(app);
 app.get('/api/health', (c) => c.json({ success: true, data: { status: 'healthy', timestamp: new Date().toISOString() } }));
 app.post('/api/client-errors', async (c) => {
     try {
@@ -22,5 +26,3 @@ app.post('/api/client-errors', async (c) => {
 });
 app.notFound((c) => c.json({ success: false, error: 'Not Found' }, 404));
 app.onError((err, c) => { console.error(`[ERROR] ${err}`); return c.json({ success: false, error: 'Internal Server Error' }, 500); });
-// GCP/Node.js export pattern - export the Hono app for Node.js runtime
-export { app };

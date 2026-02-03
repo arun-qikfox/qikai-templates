@@ -1,5 +1,6 @@
 {
   "supportedProviders": ["gcp"],
-  "deploymentType": "full-stack"
+  "deploymentType": "full-stack",
+  "useNativeTypeScript": true
 }
 

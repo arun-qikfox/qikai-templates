@@ -1,5 +1,5 @@
 import { Datastore } from '@google-cloud/datastore';
-import type { ListOptions, PageResult, DataStore } from './types.js';
+import type { ListOptions, PageResult, DataStore } from './types.ts';
 
 const KEY = Datastore.KEY as symbol;
 
@@ -17,9 +17,10 @@ export function createDatastoreStore(config: DatastoreConfig): DataStore {
   const ds = new Datastore(config.projectId ? { projectId: config.projectId } : {});
 
   function entityToDoc<T>(entity: Record<string, unknown>, id: string): T {
-    const keyObj = entity[KEY] as { id?: string; name?: string } | undefined;
+    const ent = entity as Record<string | symbol, unknown>;
+    const keyObj = ent[KEY] as { id?: string; name?: string } | undefined;
     const eid = keyObj?.id ?? keyObj?.name ?? id;
-    const { [KEY]: _k, ...data } = entity;
+    const { [KEY]: _k, ...data } = ent;
     return { id: String(eid), ...data } as T;
   }
 
@@ -73,7 +74,7 @@ export function createDatastoreStore(config: DatastoreConfig): DataStore {
       throw new Error(`Entity not found: ${kind}/${id}`);
     }
     const { id: _id, ...rest } = document as Record<string, unknown>;
-    const merged = { ...(existing as Record<string, unknown>), ...rest };
+    const merged = { ...(existing as Record<string, unknown>), ...rest } as Record<string | symbol, unknown>;
     delete merged[KEY];
     await ds.save({ key, data: merged });
     return { id, ...merged } as T;
