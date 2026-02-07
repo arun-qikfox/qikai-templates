@@ -2,13 +2,24 @@
   "packages": {
     "@/lib/errorReporter": {
       "importStyle": "named",
-      "exports": ["errorReporter"],
-      "invalidExports": ["errorBoundary", "source", "error", "errorBoundaryProps", "level"],
+      "exports": [
+        "errorReporter"
+      ],
+      "invalidExports": [
+        "errorBoundary",
+        "source",
+        "error",
+        "errorBoundaryProps",
+        "level"
+      ],
       "notes": "errorReporter.report() accepts only: message, stack, componentStack, url, userAgent, timestamp. Never pass errorBoundary, source, error, errorBoundaryProps, or level."
     },
     "zustand": {
       "importStyle": "named",
-      "exports": ["create", "useStore"],
+      "exports": [
+        "create",
+        "useStore"
+      ],
       "notes": "Named imports only. Use: import { create } from 'zustand'. No default export."
     },
     "@tanstack/react-query": {
@@ -19,19 +30,34 @@
     },
     "lucide-react": {
       "importStyle": "named",
-      "iconReplacements": { "Airplane": "Plane", "Template": "FileText" },
-      "notes": "All icons named. Airplane→Plane, Template→FileText."
+      "iconReplacements": {
+        "Airplane": "Plane",
+        "Template": "FileText",
+        "Fire": "Flame",
+        "Barbell": "Dumbbell"
+      },
+      "notes": "All icons named. Airplane\u2192Plane, Template\u2192FileText, Fire\u2192Flame, Barbell\u2192Dumbbell."
     },
     "zod": {
       "importStyle": "named",
-      "exports": ["z"],
-      "invalidExports": ["Filter"],
+      "exports": [
+        "z"
+      ],
+      "invalidExports": [
+        "Filter"
+      ],
       "notes": "Import { z }. Use z.object(). NEVER import Filter."
     },
     "@radix-ui/react-slider": {
       "importStyle": "named",
-      "exports": ["Slider"],
-      "invalidExports": ["SliderTrack", "SliderRange", "SliderThumb"],
+      "exports": [
+        "Slider"
+      ],
+      "invalidExports": [
+        "SliderTrack",
+        "SliderRange",
+        "SliderThumb"
+      ],
       "notes": "Only import { Slider }. Never SliderTrack, SliderRange, SliderThumb."
     },
     "react-flow": {
@@ -40,7 +66,10 @@
     },
     "uuid": {
       "importStyle": "named",
-      "exports": ["v4", "v1"],
+      "exports": [
+        "v4",
+        "v1"
+      ],
       "notes": "Use { v4 } from 'uuid' for IDs. Not nanoid."
     }
   }

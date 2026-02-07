@@ -1,13 +1,37 @@
 {
-  "src/components/ui/card.tsx": ["Card", "CardHeader", "CardFooter", "CardTitle", "CardDescription", "CardContent"],
-  "src/components/ui/button.tsx": ["Button", "buttonVariants", "ButtonProps"],
-  "src/components/ui/input.tsx": ["Input"],
-  "src/components/ui/textarea.tsx": ["Textarea"],
-  "src/components/ui/sonner.tsx": ["Toaster", "toast"],
-  "src/components/layout/AppLayout.tsx": ["AppLayout"],
-  "src/components/ThemeToggle.tsx": ["ThemeToggle"],
-  "src/components/app-sidebar.tsx": ["AppSidebar"],
-  "src/lib/errorReporter.ts": ["errorReporter"],
-  "src/lib/api-client.ts": ["api"]
+  "src/components/ui/card.tsx": [
+    "Card",
+    "CardHeader",
+    "CardFooter",
+    "CardTitle",
+    "CardDescription",
+    "CardContent"
+  ],
+  "src/components/ui/button.tsx": [
+    "Button",
+    "buttonVariants",
+    "ButtonProps"
+  ],
+  "src/components/ui/input.tsx": [
+    "Input"
+  ],
+  "src/components/ui/textarea.tsx": [
+    "Textarea"
+  ],
+  "src/components/ui/sonner.tsx": [
+    "Toaster",
+    "toast"
+  ],
+  "src/components/layout/AppLayout.tsx": [
+    "AppLayout"
+  ],
+  "src/components/ThemeToggle.tsx": [
+    "ThemeToggle"
+  ],
+  "src/lib/errorReporter.ts": [
+    "errorReporter"
+  ],
+  "src/lib/api-client.ts": [
+    "api"
+  ]
 }
-
