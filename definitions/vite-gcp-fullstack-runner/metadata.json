@@ -1,6 +1,9 @@
 {
   "supportedProviders": ["gcp"],
   "deploymentType": "full-stack",
-  "useNativeTypeScript": true
+  "useNativeTypeScript": true,
+  "webappType": "admin-report",
+  "features": ["auth", "dashboard", "forms"],
+  "uiPreset": "shadcn-default"
 }
 

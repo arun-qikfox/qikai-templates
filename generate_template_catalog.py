@@ -4,9 +4,13 @@ Template Catalog Generator
 
 Scans directories to identify valid Cloudflare templates and generates a JSON catalog.
 A valid template must have:
-- wrangler.jsonc or wrangler.toml
-- package.json 
+- wrangler.jsonc or wrangler.toml (Cloudflare) or app.yaml + .gcloudignore (GCP)
+- package.json
 - prompts/ directory with selection.md and usage.md files
+- definitions/<template>/metadata.json with supportedProviders and deploymentType
+
+Optional metadata fields (included when present): webappType, features, uiPreset.
+These support structured template resolution (e.g. matching "ecommerce" or "chat with auth").
 """
 
 import json
@@ -20,6 +24,11 @@ TEMPLATES_ROOT = Path(__file__).resolve().parent
 DEFINITIONS_DIR = TEMPLATES_ROOT / "definitions"
 VALID_DEPLOYMENT_TYPES = {"client-only", "full-stack", "platform-specific"}
 VALID_PROVIDERS = {"cloudflare", "gcp"}
+VALID_WEBAPP_TYPES = {
+    "ecommerce", "trading", "admin-report", "landing", "portfolio",
+    "blog", "saas", "chat", "crm", "other",
+}
+VALID_UI_PRESETS = {"liquid-glass", "material3", "shadcn-default", "minimal", "brutalist", "custom"}
 
 
 class Colors:
@@ -86,10 +95,39 @@ def load_template_metadata(template_name: str) -> Dict[str, Any]:
             f"Found: {deployment_type!r}"
         )
 
-    return {
+    result: Dict[str, Any] = {
         "supportedProviders": normalized_providers,
         "deploymentType": deployment_type,
     }
+
+    # Optional fields for template resolution (webappType, features, uiPreset)
+    webapp_type = metadata.get("webappType")
+    if webapp_type is not None:
+        if webapp_type not in VALID_WEBAPP_TYPES:
+            raise MetadataError(
+                f"Template '{template_name}' has invalid webappType '{webapp_type}'. "
+                f"Valid values: {sorted(VALID_WEBAPP_TYPES)}"
+            )
+        result["webappType"] = webapp_type
+
+    features = metadata.get("features")
+    if features is not None:
+        if not isinstance(features, list) or not all(isinstance(f, str) for f in features):
+            raise MetadataError(
+                f"Template '{template_name}' 'features' must be a list of strings. Found: {features!r}"
+            )
+        result["features"] = features
+
+    ui_preset = metadata.get("uiPreset")
+    if ui_preset is not None:
+        if ui_preset not in VALID_UI_PRESETS:
+            raise MetadataError(
+                f"Template '{template_name}' has invalid uiPreset '{ui_preset}'. "
+                f"Valid values: {sorted(VALID_UI_PRESETS)}"
+            )
+        result["uiPreset"] = ui_preset
+
+    return result
 
 
 def get_template_platform(template_dir: Path) -> Optional[str]:
@@ -312,7 +350,7 @@ def process_template(template_dir: Path, platform: str) -> Dict[str, Any]:
             f"for template '{template_name}'. Metadata: {metadata['supportedProviders']}"
         )
 
-    return {
+    result: Dict[str, Any] = {
         "name": template_name,
         "language": "typescript",  # Hardcoded as requested
         "frameworks": frameworks,
@@ -323,6 +361,16 @@ def process_template(template_dir: Path, platform: str) -> Dict[str, Any]:
         "supportedProviders": metadata["supportedProviders"],
         "deploymentType": metadata["deploymentType"],
     }
+
+    # Include optional template resolution fields when present in metadata
+    if "webappType" in metadata:
+        result["webappType"] = metadata["webappType"]
+    if "features" in metadata:
+        result["features"] = metadata["features"]
+    if "uiPreset" in metadata:
+        result["uiPreset"] = metadata["uiPreset"]
+
+    return result
 
 
 def main() -> None:

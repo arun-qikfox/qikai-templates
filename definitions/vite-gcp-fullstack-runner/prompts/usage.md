@@ -72,6 +72,7 @@ app.post('/api/users', async (c) => {
 
 ## Styling & Frontend
 - **Component imports**: Internal components use named exports. Always use: `import { ComponentName } from "@/components/ComponentName"`. Never use default import for app components (`import X from "@/components/X"`)—it causes runtime errors (React #130).
+- **Template export contract**: For `@/components/ui/*`, use only the export names listed in **TEMPLATE EXPORTS** in the prompt; do not assume exports from documentation or other projects.
 - Keep Tailwind customization in `tailwind.config.js`
 - Prefer provided ShadCN components; use React Query for async data
 - Handle loading/error states in the UI

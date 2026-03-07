@@ -1,5 +1,8 @@
 {
   "supportedProviders": ["cloudflare"],
-  "deploymentType": "full-stack"
+  "deploymentType": "full-stack",
+  "webappType": "chat",
+  "features": ["auth"],
+  "uiPreset": "shadcn-default"
 }
 

@@ -1,5 +1,8 @@
 {
   "supportedProviders": ["cloudflare"],
-  "deploymentType": "platform-specific"
+  "deploymentType": "platform-specific",
+  "webappType": "landing",
+  "features": ["forms"],
+  "uiPreset": "shadcn-default"
 }
 

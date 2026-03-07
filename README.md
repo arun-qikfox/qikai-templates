@@ -167,6 +167,21 @@ bash deploy_templates.sh
 ```
 
 
+## Template Metadata (metadata.json)
+
+Each template has a `definitions/<template-name>/metadata.json` file. Required fields:
+- `supportedProviders` (array): `["cloudflare"]` and/or `["gcp"]`
+- `deploymentType` (string): `client-only`, `full-stack`, or `platform-specific`
+
+Optional fields for template resolution (used by the platform resolver for structured criteria):
+- `webappType` (string): `ecommerce`, `trading`, `admin-report`, `landing`, `portfolio`, `blog`, `saas`, `chat`, `crm`, `other`
+- `features` (array of strings): e.g. `["auth", "dashboard", "forms", "payments", "catalog", "search", "analytics"]`
+- `uiPreset` (string): `liquid-glass`, `material3`, `shadcn-default`, `minimal`, `brutalist`, `custom`
+
+The catalog generator includes these fields when present. They improve template matching when users describe app types (e.g. "ecommerce", "chat with auth").
+
+---
+
 ## Definition YAML Reference (current generator)
 
 Supported fields in `definitions/*.yaml`:

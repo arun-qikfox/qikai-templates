@@ -1,37 +1,52 @@
 {
-  "src/components/ui/card.tsx": [
-    "Card",
-    "CardHeader",
-    "CardFooter",
-    "CardTitle",
-    "CardDescription",
-    "CardContent"
-  ],
-  "src/components/ui/button.tsx": [
-    "Button",
-    "buttonVariants",
-    "ButtonProps"
-  ],
-  "src/components/ui/input.tsx": [
-    "Input"
-  ],
-  "src/components/ui/textarea.tsx": [
-    "Textarea"
-  ],
-  "src/components/ui/sonner.tsx": [
-    "Toaster",
-    "toast"
-  ],
-  "src/components/layout/AppLayout.tsx": [
-    "AppLayout"
-  ],
-  "src/components/ThemeToggle.tsx": [
-    "ThemeToggle"
-  ],
-  "src/lib/errorReporter.ts": [
-    "errorReporter"
-  ],
-  "src/lib/api-client.ts": [
-    "api"
-  ]
+  "src/components/ui/accordion.tsx": ["Accordion", "AccordionItem", "AccordionTrigger", "AccordionContent"],
+  "src/components/ui/alert-dialog.tsx": ["AlertDialog", "AlertDialogPortal", "AlertDialogOverlay", "AlertDialogTrigger", "AlertDialogContent", "AlertDialogHeader", "AlertDialogFooter", "AlertDialogTitle", "AlertDialogDescription", "AlertDialogAction", "AlertDialogCancel"],
+  "src/components/ui/alert.tsx": ["Alert", "AlertTitle", "AlertDescription"],
+  "src/components/ui/aspect-ratio.tsx": ["AspectRatio"],
+  "src/components/ui/avatar.tsx": ["Avatar", "AvatarImage", "AvatarFallback"],
+  "src/components/ui/badge.tsx": ["Badge", "badgeVariants"],
+  "src/components/ui/breadcrumb.tsx": ["Breadcrumb", "BreadcrumbList", "BreadcrumbItem", "BreadcrumbLink", "BreadcrumbPage", "BreadcrumbSeparator", "BreadcrumbEllipsis"],
+  "src/components/ui/button.tsx": ["Button", "buttonVariants", "ButtonProps"],
+  "src/components/ui/calendar.tsx": ["Calendar", "CalendarDayButton"],
+  "src/components/ui/card.tsx": ["Card", "CardHeader", "CardFooter", "CardTitle", "CardDescription", "CardContent"],
+  "src/components/ui/carousel.tsx": ["CarouselApi", "Carousel", "CarouselContent", "CarouselItem", "CarouselPrevious", "CarouselNext"],
+  "src/components/ui/chart.tsx": ["ChartContainer", "ChartTooltip", "ChartTooltipContent", "ChartLegend", "ChartLegendContent", "ChartStyle"],
+  "src/components/ui/checkbox.tsx": ["Checkbox"],
+  "src/components/ui/collapsible.tsx": ["Collapsible", "CollapsibleTrigger", "CollapsibleContent"],
+  "src/components/ui/command.tsx": ["Command", "CommandDialog", "CommandInput", "CommandList", "CommandEmpty", "CommandGroup", "CommandItem", "CommandShortcut", "CommandSeparator"],
+  "src/components/ui/context-menu.tsx": ["ContextMenu", "ContextMenuTrigger", "ContextMenuContent", "ContextMenuItem", "ContextMenuCheckboxItem", "ContextMenuRadioItem", "ContextMenuLabel", "ContextMenuSeparator", "ContextMenuShortcut", "ContextMenuGroup", "ContextMenuPortal", "ContextMenuSub", "ContextMenuSubContent", "ContextMenuSubTrigger", "ContextMenuRadioGroup"],
+  "src/components/ui/dialog.tsx": ["Dialog", "DialogPortal", "DialogOverlay", "DialogTrigger", "DialogClose", "DialogContent", "DialogHeader", "DialogFooter", "DialogTitle", "DialogDescription"],
+  "src/components/ui/drawer.tsx": ["Drawer", "DrawerPortal", "DrawerOverlay", "DrawerTrigger", "DrawerClose", "DrawerContent", "DrawerHeader", "DrawerFooter", "DrawerTitle", "DrawerDescription"],
+  "src/components/ui/dropdown-menu.tsx": ["DropdownMenu", "DropdownMenuTrigger", "DropdownMenuContent", "DropdownMenuItem", "DropdownMenuCheckboxItem", "DropdownMenuRadioItem", "DropdownMenuLabel", "DropdownMenuSeparator", "DropdownMenuShortcut", "DropdownMenuGroup", "DropdownMenuPortal", "DropdownMenuSub", "DropdownMenuSubContent", "DropdownMenuSubTrigger", "DropdownMenuRadioGroup"],
+  "src/components/ui/form.tsx": ["useFormField", "Form", "FormItem", "FormLabel", "FormControl", "FormDescription", "FormMessage", "FormField"],
+  "src/components/ui/hover-card.tsx": ["HoverCard", "HoverCardTrigger", "HoverCardContent"],
+  "src/components/ui/input-otp.tsx": ["InputOTP", "InputOTPGroup", "InputOTPSlot", "InputOTPSeparator"],
+  "src/components/ui/input.tsx": ["Input"],
+  "src/components/ui/label.tsx": ["Label"],
+  "src/components/ui/menubar.tsx": ["Menubar", "MenubarMenu", "MenubarTrigger", "MenubarContent", "MenubarItem", "MenubarSeparator", "MenubarLabel", "MenubarCheckboxItem", "MenubarRadioGroup", "MenubarRadioItem", "MenubarPortal", "MenubarSubContent", "MenubarSubTrigger", "MenubarGroup", "MenubarSub", "MenubarShortcut"],
+  "src/components/ui/navigation-menu.tsx": ["navigationMenuTriggerStyle", "NavigationMenu", "NavigationMenuList", "NavigationMenuItem", "NavigationMenuContent", "NavigationMenuTrigger", "NavigationMenuLink", "NavigationMenuIndicator", "NavigationMenuViewport"],
+  "src/components/ui/pagination.tsx": ["Pagination", "PaginationContent", "PaginationLink", "PaginationItem", "PaginationPrevious", "PaginationNext", "PaginationEllipsis"],
+  "src/components/ui/popover.tsx": ["Popover", "PopoverTrigger", "PopoverContent", "PopoverAnchor"],
+  "src/components/ui/progress.tsx": ["Progress"],
+  "src/components/ui/radio-group.tsx": ["RadioGroup", "RadioGroupItem"],
+  "src/components/ui/resizable.tsx": ["ResizablePanelGroup", "ResizablePanel", "ResizableHandle"],
+  "src/components/ui/scroll-area.tsx": ["ScrollArea", "ScrollBar"],
+  "src/components/ui/select.tsx": ["Select", "SelectGroup", "SelectValue", "SelectTrigger", "SelectContent", "SelectLabel", "SelectItem", "SelectSeparator", "SelectScrollUpButton", "SelectScrollDownButton"],
+  "src/components/ui/separator.tsx": ["Separator"],
+  "src/components/ui/sheet.tsx": ["Sheet", "SheetPortal", "SheetOverlay", "SheetTrigger", "SheetClose", "SheetContent", "SheetHeader", "SheetFooter", "SheetTitle", "SheetDescription"],
+  "src/components/ui/sidebar.tsx": ["Sidebar", "SidebarContent", "SidebarFooter", "SidebarGroup", "SidebarGroupAction", "SidebarGroupContent", "SidebarGroupLabel", "SidebarHeader", "SidebarInput", "SidebarInset", "SidebarMenu", "SidebarMenuAction", "SidebarMenuBadge", "SidebarMenuButton", "SidebarMenuItem", "SidebarMenuSkeleton", "SidebarMenuSub", "SidebarMenuSubButton", "SidebarMenuSubItem", "SidebarProvider", "SidebarRail", "SidebarSeparator", "SidebarTrigger", "useSidebar"],
+  "src/components/ui/skeleton.tsx": ["Skeleton"],
+  "src/components/ui/slider.tsx": ["Slider"],
+  "src/components/ui/sonner.tsx": ["Toaster", "toast"],
+  "src/components/ui/switch.tsx": ["Switch"],
+  "src/components/ui/table.tsx": ["Table", "TableHeader", "TableBody", "TableFooter", "TableHead", "TableRow", "TableCell", "TableCaption"],
+  "src/components/ui/tabs.tsx": ["Tabs", "TabsList", "TabsTrigger", "TabsContent"],
+  "src/components/ui/textarea.tsx": ["Textarea"],
+  "src/components/ui/toggle-group.tsx": ["ToggleGroup", "ToggleGroupItem"],
+  "src/components/ui/toggle.tsx": ["Toggle", "toggleVariants"],
+  "src/components/ui/tooltip.tsx": ["Tooltip", "TooltipTrigger", "TooltipContent", "TooltipProvider"],
+  "src/components/layout/AppLayout.tsx": ["AppLayout"],
+  "src/components/ThemeToggle.tsx": ["ThemeToggle"],
+  "src/lib/errorReporter.ts": ["errorReporter"],
+  "src/lib/api-client.ts": ["api"]
 }
