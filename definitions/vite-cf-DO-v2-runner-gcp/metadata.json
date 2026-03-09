@@ -1,8 +1,0 @@
-{
-  "supportedProviders": ["gcp"],
-  "deploymentType": "full-stack",
-  "webappType": "admin-report",
-  "features": ["auth", "dashboard", "forms"],
-  "uiPreset": "shadcn-default"
-}
-

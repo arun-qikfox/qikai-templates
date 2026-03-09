@@ -1,8 +1,0 @@
-{
-  "supportedProviders": ["gcp"],
-  "deploymentType": "client-only",
-  "webappType": "landing",
-  "features": ["forms"],
-  "uiPreset": "shadcn-default"
-}
-

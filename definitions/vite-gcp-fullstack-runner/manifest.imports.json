@@ -5,14 +5,7 @@
       "exports": [
         "errorReporter"
       ],
-      "invalidExports": [
-        "errorBoundary",
-        "source",
-        "error",
-        "errorBoundaryProps",
-        "level"
-      ],
-      "notes": "errorReporter.report() accepts only: message, stack, componentStack, url, userAgent, timestamp. Never pass errorBoundary, source, error, errorBoundaryProps, or level."
+      "notes": "errorReporter.report() accepts: message, stack, componentStack, url, userAgent, timestamp. Optional: errorBoundary, source, error, errorBoundaryProps, level."
     },
     "zustand": {
       "importStyle": "named",

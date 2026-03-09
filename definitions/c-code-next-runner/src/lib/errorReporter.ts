@@ -11,6 +11,7 @@ interface ErrorReport {
   lineno?: number;
   colno?: number;
   error?: unknown;
+  level?: 'error' | 'warning' | 'info';
 }
 
 interface ErrorSignature {

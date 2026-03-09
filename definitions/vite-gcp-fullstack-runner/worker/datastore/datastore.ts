@@ -17,10 +17,13 @@ export function createDatastoreStore(config: DatastoreConfig): DataStore {
   const ds = new Datastore(config.projectId ? { projectId: config.projectId } : {});
 
   function entityToDoc<T>(entity: Record<string, unknown>, id: string): T {
-    const ent = entity as Record<string | symbol, unknown>;
-    const keyObj = ent[KEY] as { id?: string; name?: string } | undefined;
+    const keyObj = Reflect.get(entity, KEY) as { id?: string; name?: string } | undefined;
     const eid = keyObj?.id ?? keyObj?.name ?? id;
-    const { [KEY]: _k, ...data } = ent;
+    const data: Record<string, unknown> = {};
+    for (const k of Reflect.ownKeys(entity)) {
+      if (k === KEY) continue;
+      if (typeof k === 'string') data[k] = (entity as Record<string | symbol, unknown>)[k];
+    }
     return { id: String(eid), ...data } as T;
   }
 
@@ -75,7 +78,7 @@ export function createDatastoreStore(config: DatastoreConfig): DataStore {
     }
     const { id: _id, ...rest } = document as Record<string, unknown>;
     const merged = { ...(existing as Record<string, unknown>), ...rest } as Record<string | symbol, unknown>;
-    delete merged[KEY];
+    Reflect.deleteProperty(merged, KEY);
     await ds.save({ key, data: merged });
     return { id, ...merged } as T;
   };
