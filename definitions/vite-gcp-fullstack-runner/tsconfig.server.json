@@ -3,6 +3,8 @@
     "target": "ES2022",
     "module": "commonjs",
     "moduleResolution": "node",
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
@@ -18,4 +20,3 @@
   "include": ["server.ts", "worker/**/*", "shared/**/*"],
   "exclude": ["node_modules", "dist", "src"]
 }
-
