@@ -42,6 +42,15 @@ next-env.d.ts
 .wrangler
 .dev.vars*
 .env*
+
+# Ignore all zip files
 *.zip
+
+# Make sure the deployed_build folder itself is not ignored
+!deployed_build/
+
+# Except for zip files in deployed_build
+!deployed_build/*.zip
+
 zipsbuild/
 /build
