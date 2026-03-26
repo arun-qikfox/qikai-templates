@@ -1,4 +1,6 @@
 name: "c-code-next-runner"
 description: "Next.js application with OpenNext for Cloudflare deployment"
 base_reference: "next-reference"
-
+# Patch package.json to match original template name
+package_patches:
+  name: "c-code-next-runner"

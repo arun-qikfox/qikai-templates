@@ -1,11 +1,18 @@
 name: "vite-cf-DO-v2-runner"
-description: "Vite/React full-stack template with pluggable data store (Firestore default)"
+description: "Vite/React application with Cloudflare Durable Objects v2"
 base_reference: "vite-reference"
+projectType: app
 
-# Patch package.json to match original template name
 package_patches:
   name: "vite-cf-do-v2-runner"
+  dependencies:
+    "cloudflare": "^5.0.0"
 
 excludes:
   - "worker/userRoutes.ts"
-  
+
+file_patches:
+  - file: "worker/index.ts"
+    replacements:
+      - find: "import { userRoutes } from './userRoutes';"
+        replace: "import { userRoutes } from './user-routes';"

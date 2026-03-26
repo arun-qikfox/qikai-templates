@@ -1,124 +1,65 @@
 /**
- * Core utilities for the multi-platform chat agent template
+ * Core utilities for the Cloudflare Agents template
+ * STRICTLY DO NOT MODIFY THIS FILE - Hidden from AI to prevent breaking core functionality
  */
-import type { Context } from 'hono';
-import type { ApiResponse } from './types';
-import { createFirestoreStore, type FirestoreConfig } from './datastore/firestore';
-import { createHttpDataStore, type HttpProviderConfig } from './datastore/http';
-import type { DataStore } from './datastore/types';
-
-export type DataProviderTarget = 'firestore' | 'http';
-
+import type { AppController } from './app-controller';
+import type { ChatAgent } from './agent';
 export interface Env {
-  DATA_PROVIDER?: string;
-  FIRESTORE_PROJECT_ID?: string;
-  FIRESTORE_CLIENT_EMAIL?: string;
-  FIRESTORE_PRIVATE_KEY_B64?: string;
-  FIRESTORE_DATABASE_ID?: string;
-  FIRESTORE_API_ENDPOINT?: string;
-  DATA_HTTP_BASE_URL?: string;
-  DATA_HTTP_API_KEY?: string;
-  DATA_HTTP_HEADERS_JSON?: string;
-  CF_AI_BASE_URL: string;
-  CF_AI_API_KEY: string;
-  SERPAPI_KEY?: string;
-  OPENROUTER_API_KEY?: string;
+    CF_AI_BASE_URL: string;
+    CF_AI_API_KEY: string;
+    SERPAPI_KEY: string;
+    OPENROUTER_API_KEY: string;
+    CHAT_AGENT: DurableObjectNamespace<ChatAgent>;
+    APP_CONTROLLER: DurableObjectNamespace<AppController>;
 }
 
-export interface AiGatewayConfig {
-  baseUrl: string;
-  apiKey: string;
+/**
+ * Get AppController stub for session management
+ * Uses a singleton pattern with fixed ID for consistent routing
+ */
+export function getAppController(env: Env): DurableObjectStub<AppController> {
+  const id = env.APP_CONTROLLER.idFromName("controller");
+  return env.APP_CONTROLLER.get(id);
 }
 
-function parseProvider(env: Env): DataProviderTarget {
-  const specified = env.DATA_PROVIDER?.toLowerCase().trim();
-  if (specified === 'http') return 'http';
-  return 'firestore';
-}
-
-function parseAdditionalHeaders(json?: string): Record<string, string> | undefined {
-  if (!json) return undefined;
+/**
+ * Register a new chat session with the control plane
+ * Called automatically when a new ChatAgent is created
+ */
+export async function registerSession(env: Env, sessionId: string, title?: string): Promise<void> {
   try {
-    const parsed = JSON.parse(json);
-    if (parsed && typeof parsed === 'object') {
-      const headers: Record<string, string> = {};
-      for (const [key, value] of Object.entries(parsed)) {
-        if (typeof value === 'string') headers[key] = value;
-      }
-      return headers;
-    }
+    const controller = getAppController(env);
+    await controller.addSession(sessionId, title);
   } catch (error) {
-    console.warn('DATA_HTTP_HEADERS_JSON could not be parsed as JSON:', error);
+    console.error('Failed to register session:', error);
+    // Don't throw - session should work even if registration fails
   }
-  return undefined;
 }
 
-function resolveFirestoreConfig(env: Env): FirestoreConfig {
-  const projectId = env.FIRESTORE_PROJECT_ID?.trim();
-  const clientEmail = env.FIRESTORE_CLIENT_EMAIL?.trim();
-  const privateKeyPemB64 = env.FIRESTORE_PRIVATE_KEY_B64?.trim();
-
-  if (!projectId || !clientEmail || !privateKeyPemB64) {
-    throw new Error(
-      'Firestore configuration is incomplete. Ensure FIRESTORE_PROJECT_ID, FIRESTORE_CLIENT_EMAIL, and FIRESTORE_PRIVATE_KEY_B64 are set.',
-    );
+/**
+ * Update session activity timestamp
+ * Called when a session receives messages
+ */
+export async function updateSessionActivity(env: Env, sessionId: string): Promise<void> {
+  try {
+    const controller = getAppController(env);
+    await controller.updateSessionActivity(sessionId);
+  } catch (error) {
+    console.error('Failed to update session activity:', error);
+    // Don't throw - this is non-critical
   }
-
-  return {
-    projectId,
-    clientEmail,
-    privateKeyPemB64,
-    databaseId: env.FIRESTORE_DATABASE_ID?.trim(),
-    endpoint: env.FIRESTORE_API_ENDPOINT?.trim(),
-  };
 }
 
-function resolveHttpConfig(env: Env): HttpProviderConfig {
-  const baseUrl = env.DATA_HTTP_BASE_URL?.trim();
-  if (!baseUrl) {
-    throw new Error(
-      'HTTP data provider selected but DATA_HTTP_BASE_URL is not defined. Provide a base URL to proxy data operations (e.g., MongoDB Data API).',
-    );
+/**
+ * Unregister a session from the control plane
+ * Called when a session is explicitly deleted
+ */
+export async function unregisterSession(env: Env, sessionId: string): Promise<boolean> {
+  try {
+    const controller = getAppController(env);
+    return await controller.removeSession(sessionId);
+  } catch (error) {
+    console.error('Failed to unregister session:', error);
+    return false;
   }
-
-  return {
-    baseUrl,
-    apiKey: env.DATA_HTTP_API_KEY?.trim(),
-    additionalHeaders: parseAdditionalHeaders(env.DATA_HTTP_HEADERS_JSON),
-  };
 }
-
-export function createDataStore(env: Env): DataStore {
-  const provider = parseProvider(env);
-  if (provider === 'http') {
-    return createHttpDataStore(resolveHttpConfig(env));
-  }
-  return createFirestoreStore(resolveFirestoreConfig(env));
-}
-
-export function getAiGatewayConfig(env: Env): AiGatewayConfig {
-  const baseUrl = env.CF_AI_BASE_URL?.trim();
-  const apiKey = env.CF_AI_API_KEY?.trim();
-  if (!baseUrl || !apiKey) {
-    throw new Error('CF_AI_BASE_URL and CF_AI_API_KEY must be configured for chat operations.');
-  }
-  return { baseUrl, apiKey };
-}
-
-export function getSerpApiKey(env: Env): string | undefined {
-  return env.SERPAPI_KEY?.trim();
-}
-
-export const ok = <T>(c: Context, data: T) => c.json({ success: true, data } satisfies ApiResponse<T>);
-export const bad = (c: Context, error: string, status = 400) =>
-  c.json({ success: false, error } satisfies ApiResponse, status);
-export const notFound = (c: Context, error = 'not found') =>
-  c.json({ success: false, error } satisfies ApiResponse, 404);
-export const isStr = (value: unknown): value is string => typeof value === 'string' && value.trim().length > 0;
-
-export const parseLimit = (value: string | undefined, fallback = 20) => {
-  if (!value) return fallback;
-  const parsed = Number(value);
-  if (Number.isNaN(parsed) || parsed <= 0) return fallback;
-  return Math.min(parsed, 100);
-};

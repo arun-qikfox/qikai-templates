@@ -1,7 +1,7 @@
 name: "vite-cf-DO-runner"
-description: "Vite/React application with Firestore-backed datastore abstraction"
+description: "Vite/React application with Cloudflare Durable Objects"
 base_reference: "vite-reference"
+projectType: app
 
-# Patch package.json to match original template name
 package_patches:
   name: "vite-cf-do-runner"

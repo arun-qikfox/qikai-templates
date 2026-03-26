@@ -12,16 +12,14 @@ import { ChatCompletionMessageFunctionToolCall } from 'openai/resources/index.mj
 export class ChatHandler {
   private client: OpenAI;
   private model: string;
-  private serpApiKey?: string;
 
-  constructor(aiGatewayUrl: string, apiKey: string, model: string, serpApiKey?: string) {
+  constructor(aiGatewayUrl: string, apiKey: string, model: string) {
     this.client = new OpenAI({ 
       baseURL: aiGatewayUrl,
       apiKey: apiKey
     });
     console.log("BASE URL", aiGatewayUrl);
     this.model = model;
-    this.serpApiKey = serpApiKey;
   }
 
   /**
@@ -159,7 +157,7 @@ export class ChatHandler {
       openAiToolCalls.map(async (tc) => {
         try {
           const args = tc.function.arguments ? JSON.parse(tc.function.arguments) : {};
-          const result = await executeTool(tc.function.name, args, this.serpApiKey);
+          const result = await executeTool(tc.function.name, args);
           return {
             id: tc.id,
             name: tc.function.name,

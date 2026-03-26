@@ -1,23 +1,18 @@
 # Template Selection
 
-Full-stack application with server-side state management. Minimal setup that uses a global state store for persistence and stateful features.
-
-## Template Constraints
-- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`.
-- If a change is required, request it instead of editing those files.
+Single Durable Object (DO) app on Cloudflare Workers. Minimal setup that uses one global DO for persistence and DO features.
 
 Use when:
-- You need a backend with persistent storage using Firestore (default) or any HTTPS data provider
+- You need server-side state with one global DO
 - Real-time/stateful services, dashboards, counters
-- Backend-heavy apps requiring persistent state without locking into Cloudflare primitives
 
 Avoid when:
 - Static/SPAs with no backend
 - SEO/SSR landing pages
-- You only need database-like storage across many entities (see Firestore chat runner)
+- You only need database-like storage across many entities (see DO v2 runner)
 
 Built with:
 - React Router, ShadCN UI, Tailwind, Lucide Icons, ESLint, Vite
-- Platform-agnostic backend powered by a datastore abstraction (Firestore default, HTTP fallback) that can deploy to Google App Engine, Cloudflare Workers, or any hosting platform
+- Cloudflare Workers + single DO for persistence
 
 

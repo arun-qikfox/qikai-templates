@@ -1,13 +1,14 @@
+// Making changes to this file is **STRICTLY** forbidden. Please add your routes in `userRoutes.ts` file.
+
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { userRoutes } from './user-routes';
-import type { Env } from './core-utils';
+import { Env } from './core-utils';
 
 export interface ClientErrorReport {
   message: string;
   url: string;
-  userAgent: string;
   timestamp: string;
   stack?: string;
   componentStack?: string;
@@ -26,14 +27,12 @@ app.use('*', logger());
 app.use('/api/*', cors({ origin: '*', allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], allowHeaders: ['Content-Type', 'Authorization'] }));
 
 userRoutes(app);
-
 app.get('/api/health', (c) => c.json({ success: true, data: { status: 'healthy', timestamp: new Date().toISOString() }}));
 
 app.post('/api/client-errors', async (c) => {
   try {
     const e = await c.req.json<ClientErrorReport>();
-    if (!e.message) return c.json({ success: false, error: 'Missing required fields' }, 400);
-    console.error('[CLIENT ERROR]', JSON.stringify(e, null, 2));
+    console.error('[CLIENT ERROR]', JSON.stringify({ timestamp: e.timestamp || new Date().toISOString(), message: e.message, url: e.url, stack: e.stack, componentStack: e.componentStack, errorBoundary: e.errorBoundary }, null, 2));
     return c.json({ success: true });
   } catch (error) {
     console.error('[CLIENT ERROR HANDLER] Failed:', error);
@@ -43,5 +42,7 @@ app.post('/api/client-errors', async (c) => {
 
 app.notFound((c) => c.json({ success: false, error: 'Not Found' }, 404));
 app.onError((err, c) => { console.error(`[ERROR] ${err}`); return c.json({ success: false, error: 'Internal Server Error' }, 500); });
+
+console.log(`Server is running`)
 
 export default { fetch: app.fetch } satisfies ExportedHandler<Env>;

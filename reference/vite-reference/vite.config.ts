@@ -92,11 +92,11 @@ export default ({ mode }: { mode: string }) => {
   const previewPort = env.VITE_PREVIEW_PORT; // Will be set by preview service
   
   // Configure HMR WebSocket for preview environments
-  let hmrConfig: { host?: string; protocol?: string; port?: string | number; clientPort?: string | number } | undefined;
+  let hmrConfig: { host?: string; protocol?: string; port?: number; clientPort?: number } | undefined;
   if (previewDomain) {
     try {
       const previewUrl = new URL(previewDomain);
-      const port = previewUrl.port || (previewUrl.protocol === 'https:' ? '443' : '80');
+      const port = previewUrl.port ? parseInt(previewUrl.port, 10) : (previewUrl.protocol === 'https:' ? 443 : 80);
       hmrConfig = {
         host: previewUrl.hostname,
         protocol: previewUrl.protocol === 'https:' ? 'wss' : 'ws',

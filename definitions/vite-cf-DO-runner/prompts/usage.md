@@ -1,88 +1,142 @@
 # Usage
 
 ## Overview
-Full-stack React application with server-side state management powered by a provider-agnostic datastore abstraction.
+Cloudflare Workers + React. Single global Durable Object (DO) for all persistence and DO features.
 - Frontend: React Router 6 + TypeScript + ShadCN UI
-- Backend: Hono-based API using `createDataStore` (Firestore default, HTTP fallback)
+- Backend: Hono Worker with one DO
 - Shared: Types in `shared/types.ts`
-- Deployment: Works on Google App Engine, Cloudflare Workers, or any hosting platform
 
 ## ⚠️ IMPORTANT: Demo Content
-**All demo pages, mock data, and API endpoints exist only to showcase patterns. Replace them with real application logic.**
-- Replace `HomePage.tsx` and `DemoPage.tsx` with actual pages
-- Remove or adapt mock data in `shared/mock-data.ts`
-- Replace demo API endpoints (`/api/demo`, `/api/counter`) with real functionality backed by your datastore
+**The existing demo pages, mock data, and API endpoints are FOR TEMPLATE UNDERSTANDING ONLY.**
+- Replace `src/pages/HomePage.tsx` with your application UI
+- Remove or replace mock data in `shared/mock-data.ts` with real data structures
+- Remove or replace demo API endpoints (`/api/demo`, `/api/counter`) and implement actual business logic
+- The counter and demo items examples show DO patterns - replace with real functionality
 
-## Tech Stack
+## Tech
 - React Router 6, ShadCN UI, Tailwind, Lucide, Hono, TypeScript
 
-## Development Guidelines
-- **Tailwind Colors**: Extend `tailwind.config.js`; do not hardcode colors in CSS
-- **Components**: Prefer existing ShadCN components over custom implementations
-- **Icons**: Import from `lucide-react`
-- **Error Handling**: Error boundaries are provided; wire them into your flows
-- **Backend Patterns**: Follow `worker/index.ts` and `worker/userRoutes.ts`, using `createDataStore` for persistence
-- **Platform Config**: Keep deployment descriptors (e.g., `wrangler.jsonc`, `app.yaml`) intact unless absolutely required
-- **Protected configs**: Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`. Request changes instead of editing them.
+## Development Restrictions
+- **Tailwind Colors**: Hardcode custom colors in `tailwind.config.js`, NOT in `index.css`
+- **Components**: Use existing ShadCN components instead of writing custom ones
+- **Icons**: Import from `lucide-react` directly
+- **Error Handling**: ErrorBoundary components are pre-implemented
+- **Worker Patterns**: Follow exact patterns in `worker/index.ts` to avoid breaking functionality
+- **CRITICAL**: You CANNOT modify `wrangler.jsonc` - only use the single `GlobalDurableObject` binding
 
 ## Styling
-- Responsive, accessible layouts
-- Use Tailwind for spacing/typography and ShadCN for components
+- Responsive, accessible
+- Prefer ShadCN components; Tailwind for layout/spacing/typography
 
 ## Code Organization
 
-### Frontend
-- `src/pages/HomePage.tsx` – placeholder landing page
-- `src/pages/DemoPage.tsx` – demo of datastore-backed endpoints
-- `src/components/ThemeToggle.tsx` – theme switcher
-- `src/hooks/useTheme.ts` – theme management hook
+### Frontend Structure
+- `src/pages/HomePage.tsx` - Placeholder wait screen (replace it)
+- `src/components/TemplateDemo.tsx` - Demo-only UI (remove/ignore when building your app)
+- `src/components/ThemeToggle.tsx` - Theme switching component
+- `src/hooks/useTheme.ts` - Theme management hook
 
-### Backend
-- `worker/index.ts` – backend entrypoint (middleware + router wiring)
-- `worker/userRoutes.ts` – API routes; use datastore helpers instead of platform-specific APIs
-- `worker/entities.ts` – demo persistence helpers built on `createDataStore`
-- `worker/core-utils.ts` – datastore factory and response helpers
-- `worker/datastore/*` – Firestore + HTTP provider implementations
+### Backend Structure
+- `worker/index.ts` - Worker entrypoint (registers routes; do not change patterns)
+- `worker/userRoutes.ts` - Add routes here
+- `worker/durableObject.ts` - DO methods (e.g., counter, demo items)
+- `worker/core-utils.ts` - Core types/utilities (do not modify)
 
 ### Shared
-- `shared/types.ts` – API/data types
-- `shared/mock-data.ts` – demo-only seed data
+- `shared/types.ts` - API/data types
+- `shared/mock-data.ts` - Demo-only; replace
 
 ## API Patterns
-Use the datastore abstraction rather than platform-specific bindings:
-```ts
-import { createDataStore, ok, bad } from './core-utils';
 
+### Adding Endpoints
+Follow this pattern in `worker/userRoutes.ts`:
+```typescript
+// Durable Object endpoint for data retrieval
 app.get('/api/my-data', async (c) => {
-  const store = createDataStore(c.env);
-  const page = await store.list<MyType>('my-data');
-  return ok(c, page.items);
+  const stub = c.env.GlobalDurableObject.get(c.env.GlobalDurableObject.idFromName("global"));
+  const data = await stub.getMyData();
+  return c.json({ success: true, data } satisfies ApiResponse<MyType[]>);
 });
 
+// Durable Object endpoint for data modification
 app.post('/api/my-data', async (c) => {
-  const payload = (await c.req.json()) as MyType;
-  if (!payload.name?.trim()) return bad(c, 'name required');
-  const store = createDataStore(c.env);
-  await store.create('my-data', payload, { id: payload.id ?? crypto.randomUUID() });
-  return ok(c, payload);
+  const body = await c.req.json() as MyType;
+  const stub = c.env.GlobalDurableObject.get(c.env.GlobalDurableObject.idFromName("global"));
+  const data = await stub.addMyData(body);
+  return c.json({ success: true, data } satisfies ApiResponse<MyType[]>);
 });
 ```
 
-## Environment Variables
-Configure datastore credentials via environment variables or secrets:
-- `FIRESTORE_PROJECT_ID` – GCP project ID
-- `FIRESTORE_CLIENT_EMAIL` – service account email
-- `FIRESTORE_PRIVATE_KEY_B64` – base64-encoded private key (PEM)
-- Optional: `FIRESTORE_DATABASE_ID`, `FIRESTORE_API_ENDPOINT`
-- `DATA_PROVIDER` – set to `http` to switch away from Firestore
-- `DATA_HTTP_BASE_URL`, `DATA_HTTP_API_KEY`, `DATA_HTTP_HEADERS_JSON` – configure external HTTPS datastore
+### Durable Object Methods Pattern
+Add methods to `GlobalDurableObject` class in `worker/durableObject.ts`:
+```typescript
+async getMyData(): Promise<MyType[]> {
+  const items = await this.ctx.storage.get("my_data_key");
+  if (items) {
+    return items as MyType[];
+  }
+  // Initialize with default data if not exists
+  const defaultData = DEFAULT_MY_DATA;
+  await this.ctx.storage.put("my_data_key", defaultData);
+  return defaultData;
+}
 
+async addMyData(item: MyType): Promise<MyType[]> {
+  const items = await this.getMyData();
+  const updated = [...items, item];
+  await this.ctx.storage.put("my_data_key", updated);
+  return updated;
+}
+```
+
+### Type Safety
+- Return `ApiResponse<T>`
+- Share types via `shared/types.ts`
+- DO methods must be typed
+
+## Bindings
+CRITICAL: only `GlobalDurableObject` is available for stateful ops
+**IMPORTANT: You are NOT ALLOWED to edit/add/remove ANY worker bindings OR touch wrangler.jsonc/wrangler.toml. Build your application around what is already provided.**
+
+**YOU CANNOT**:
+- Modify `wrangler.jsonc` 
+- Add new Durable Objects or KV namespaces
+- Change binding names or add new bindings
 ## Storage Patterns
-- Use descriptive collection names (`demo-items`, `counters`, etc.)
-- Seed default data through helpers (see `ensureDemoSeed`)
-- Prefer idempotent operations and partial updates via `store.update`
+- Use unique keys per dataset (e.g. `counter_value`, `demo_items`)
+- Initialize data on first access as needed
+- Use atomic operations for consistency
 
 ## Frontend
-- Call `/api/*` routes directly
-- Handle loading and error states using shared types
+- Call `/api/*` directly
+- Handle loading/errors; use shared types
 
+---
+
+## Routing (CRITICAL)
+
+Uses `createBrowserRouter` - do NOT switch to `BrowserRouter`/`HashRouter`.
+
+If you switch routers, `RouteErrorBoundary`/`useRouteError()` will not work (you'll get a router configuration error screen instead of proper route error handling).
+
+**Add routes in `src/main.tsx`:**
+```tsx
+const router = createBrowserRouter([
+  { path: "/", element: <HomePage />, errorElement: <RouteErrorBoundary /> },
+  { path: "/new", element: <NewPage />, errorElement: <RouteErrorBoundary /> },
+]);
+```
+
+**Navigation:** `import { Link } from 'react-router-dom'` then `<Link to="/new">New</Link>`
+
+**Don't:**
+- Use `BrowserRouter`, `HashRouter`, `MemoryRouter`
+- Remove `errorElement` from routes
+- Use `useRouteError()` in your components
+
+## UI Components
+All ShadCN components are in `./src/components/ui/*`. Import and use them directly:
+```tsx
+import { Button } from "@/components/ui/button";
+```
+**Do not rewrite these components.**

@@ -1,5 +1,5 @@
 const nextConfig = {
-  /* Simplified Next.js 15.3.1 configuration for stability */
+  /* Simplified Next.js 15.x configuration for stability */
   reactStrictMode: false, // Disable in dev for faster startup
   
   // Basic compiler optimizations
@@ -17,7 +17,6 @@ const nextConfig = {
     
     // Basic performance features
     optimisticClientCache: true,
-    instrumentationHook: true,
   },
 };
 export default nextConfig;

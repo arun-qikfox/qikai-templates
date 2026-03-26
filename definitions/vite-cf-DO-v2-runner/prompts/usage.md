@@ -1,84 +1,138 @@
 # Usage
 
 ## Overview
-Full-stack React + Hono starter wired for Google Cloud App Engine with Firestore by default. The backend exposes a pluggable data store so you can swap Firestore for any HTTPS-accessible database (MongoDB Data API, Supabase REST, custom microservice) by flipping environment variables.
+Cloudflare Workers + React. Storage via a single Durable Object (DO) powered library to support multiple entities on a single DO.
+- Frontend: React Router 6 + TypeScript + ShadCN UI
+- Backend: Hono Worker; persistence through one DO (no direct DO access)
+- Shared: Types in `shared/types.ts`
 
-- **Frontend**: React Router 6, ShadCN UI, Tailwind, TypeScript
-- **Backend**: Hono API running on Cloudflare Workers or App Engine Node
-- **Storage**: Firestore REST integration (default) + HTTP proxy provider
-- **Shared**: Types in `shared/types.ts`
+## ⚠️ IMPORTANT: Demo Content
+**The existing demo pages, mock data, and API endpoints are FOR TEMPLATE UNDERSTANDING ONLY.**
+- Replace `src/pages/HomePage.tsx` with your application UI
+- Remove or replace mock data in `shared/mock-data.ts` with real data structures
+- Remove or replace demo API endpoints (`/api/demo`, `/api/counter`) and implement actual business logic
+- The counter and demo items examples show DO patterns - replace with real functionality
 
-## Important: Demo Content
-The bundled pages, mock data, and routes are for reference only.
-- Replace `HomePage.tsx` / `DemoPage.tsx` with real UI
-- Swap out `shared/mock-data.ts` with production data structures
-- Replace demo API routes in `worker/user-routes.ts`
+## Tech
+- React Router 6, ShadCN UI, Tailwind, Lucide, Hono, TypeScript
 
-## Architecture
-- `worker/core-utils.ts` & `worker/datastore/*`: storage configuration + provider implementations
-- `worker/entities.ts`: example repositories (users, chats) using the data store abstraction
-- `worker/user-routes.ts`: demo API routes (CRUD + messaging)
-- `src/lib/api-client.ts`: React Query client
+## Development Restrictions
+- **Tailwind Colors**: Hardcode custom colors in `tailwind.config.js`, NOT in `index.css`
+- **Components**: Use existing ShadCN components instead of writing custom ones
+- **Icons**: Import from `lucide-react` directly
+- **Error Handling**: ErrorBoundary components are pre-implemented
+- **Worker Patterns**: Follow exact patterns in `worker/index.ts` to avoid breaking functionality
+- **CRITICAL**: You CANNOT modify `wrangler.jsonc` - only use the single `GlobalDurableObject` binding
+- **CRITICAL**: You CANNOT modify `worker/core-utils.ts` - it is a library to abstract durable object operations, handcrafted by a team of experts at Cloudflare
 
-## Environment Variables
-Set these before deploying (Cloudflare secrets or App Engine env vars):
+## Styling
+- Responsive, accessible
+- Prefer ShadCN components; Tailwind for layout/spacing/typography
+- Use framer-motion sparingly for micro-interactions
 
-### Firestore (default)
-- `DATA_PROVIDER=firestore`
-- `FIRESTORE_PROJECT_ID` – GCP project ID
-- `FIRESTORE_CLIENT_EMAIL` – service-account email
-- `FIRESTORE_PRIVATE_KEY_B64` – base64-encoded PEM private key (entire key file encoded once)
-- `FIRESTORE_DATABASE_ID` *(optional)* – defaults to `(default)`
-- `FIRESTORE_API_ENDPOINT` *(optional)* – override for emulator testing
+## Code Organization
 
-### HTTP provider (e.g., MongoDB Data API)
-Set `DATA_PROVIDER=http` and supply:
-- `DATA_HTTP_BASE_URL` – HTTPS endpoint exposing CRUD routes
-- `DATA_HTTP_API_KEY` *(optional)* – bearer token injected in `Authorization`
-- `DATA_HTTP_HEADERS_JSON` *(optional)* – JSON object string for additional headers
+### Frontend Structure
+- `src/pages/HomePage.tsx` - Placeholder wait screen (replace it)
+- `src/components/TemplateDemo.tsx` - Demo-only UI (remove/ignore when building your app)
+- `src/components/ThemeToggle.tsx` - Theme switching component
+- `src/hooks/useTheme.ts` - Theme management hook
 
-Switch providers by updating `DATA_PROVIDER`; no code changes required.
+### Backend Structure
+- `worker/index.ts` - Worker entrypoint (registers routes; do not change patterns)
+- `worker/user-routes.ts` - Add routes here using existing helpers
+- `worker/core-utils.ts` - DO + core index/entity utilities (**DO NOT MODIFY**)
+- `worker/entities.ts` - Demo entities (users, chats)
 
-## Adding Routes
-Use the data store helpers instead of talking to Firestore directly:
+### Shared
+- `shared/types.ts` - API/data types
+- `shared/mock-data.ts` - Demo-only; replace
 
+## API Patterns
+
+### Adding Endpoints (use Entities)
+In `worker/user-routes.ts`, use entity helpers from `worker/entities.ts` and response helpers from `worker/core-utils.ts`.
 ```ts
 import { ok, bad } from './core-utils';
-import { createUser } from './entities';
-
+import { UserEntity } from './entities';
 app.post('/api/users', async (c) => {
-  const { name } = await c.req.json<{ name?: string }>();
+  const { name } = await c.req.json();
   if (!name?.trim()) return bad(c, 'name required');
-  const user = await createUser(c.env, { id: crypto.randomUUID(), name: name.trim() });
+  const user = await UserEntity.create(c.env, { id: crypto.randomUUID(), name: name.trim() });
   return ok(c, user);
 });
 ```
 
-## Firestore Notes
-- Service account keys should be stored as **secrets** (`wrangler secret put`, Secret Manager) not committed to git.
-- `FIRESTORE_PRIVATE_KEY_B64` must include the full PEM (header + footer) before encoding.
-- Firestore REST API is used; requests are signed and cached per instance.
-- `entities.ts` shows how to seed collections and run CRUD operations.
+<!-- No direct DO methods in this template; use Entities/Index helpers instead. -->
 
-## Styling & Frontend
-- Keep Tailwind customization in `tailwind.config.js`
-- Prefer provided ShadCN components; use React Query for async data
-- Handle loading/error states in the UI
-- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`. Request changes instead of editing them.
+### Type Safety
+- Always return `ApiResponse<T>`
+- Share types via `shared/types.ts`
 
-### Theme & Color System
-- The template already ships with the standard ShadCN `ThemeProvider` (`src/components/theme-provider.tsx`) and a ready-made mode toggle button. Always keep or reintroduce that toggle in Phase 1 so users can switch themes instantly.
-- Treat **light mode** as the hero experience but ship an equally polished **dark mode** in the same phase. Use Tailwind `dark:` variants, `bg-background`, `text-foreground`, and the CSS variables defined in `globals.css` so colors stay in sync between themes.
-- Never hard-code raw hex colors inside components. Extend the Tailwind config or CSS variables if new semantics are required (e.g., `--brand-primary`, `--brand-muted`) and reference those tokens across both themes.
-- Before completing a phase, manually review every major screen in both modes to ensure contrast ratios, shadows, and gradients remain legible.
+## Bindings
+CRITICAL: only `GlobalDurableObject` is available for stateful ops and is managed by our custom library. It is not to be modified or accessed directly in any way.
 
-## Deployment
-- App Engine: `npm run build && gcloud app deploy`
-- Cloudflare Workers: `bun run build && wrangler deploy`
-- Ensure the same environment variables exist in both runtimes for consistent behavior.
+**IMPORTANT: You are NOT ALLOWED to edit/add/remove ANY worker bindings OR touch wrangler.jsonc/wrangler.toml. Build your application around what is already provided.**
 
-## Custom Providers
-- Implement your own HTTPS service that accepts the same payloads (`DataStore` interface).
-- Use `DATA_PROVIDER=http` plus headers/keys to point the template at your service.
+**YOU CANNOT**:
+- Modify `wrangler.jsonc` 
+- Add new Durable Objects or KV namespaces
+- Change binding names or add new bindings
 
-This approach keeps Google Cloud as the default while remaining declarative and flexible for other databases.
+## Storage Patterns
+- Use Entities/Index utilities from `core-utils.ts`; avoid raw DO calls
+- Atomic ops via provided helpers
+
+Example of using the core-utils library:
+```ts
+import { IndexedEntity } from "./core-utils";
+import type { User, Chat, ChatMessage } from "@shared/types";
+import { MOCK_CHAT_MESSAGES, MOCK_CHATS, MOCK_USERS } from "@shared/mock-data";
+
+export class UserEntity extends IndexedEntity<User> {
+  static readonly entityName = "user";
+  static readonly indexName = "users";
+  static readonly initialState: User = { id: "", name: "" };
+  static seedData = MOCK_USERS;
+}
+```
+
+Then you can do stuff like:
+```ts
+const user = await UserEntity.create(c.env, { id: crypto.randomUUID(), name: name.trim() });
+await UserEntity.list(c.env, null, 10); // Fetch first 10 users
+```
+
+## Frontend
+- Call `/api/*` endpoints directly
+- Handle loading/errors; use shared types
+
+---
+
+## Routing (CRITICAL)
+
+Uses `createBrowserRouter` - do NOT switch to `BrowserRouter`/`HashRouter`.
+
+If you switch routers, `RouteErrorBoundary`/`useRouteError()` will not work (you'll get a router configuration error screen instead of proper route error handling).
+
+**Add routes in `src/main.tsx`:**
+```tsx
+const router = createBrowserRouter([
+  { path: "/", element: <HomePage />, errorElement: <RouteErrorBoundary /> },
+  { path: "/new", element: <NewPage />, errorElement: <RouteErrorBoundary /> },
+]);
+```
+
+**Navigation:** `import { Link } from 'react-router-dom'` then `<Link to="/new">New</Link>`
+
+**Don't:**
+- Use `BrowserRouter`, `HashRouter`, `MemoryRouter`
+- Remove `errorElement` from routes
+- Use `useRouteError()` in your components
+
+## UI Components
+All ShadCN components are in `./src/components/ui/*`. Import and use them directly:
+```tsx
+import { Button } from "@/components/ui/button";
+```
+**Do not rewrite these components.**

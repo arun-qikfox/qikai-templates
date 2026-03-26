@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Setup script for the Firestore-ready multistore template
+# Setup script for the Cloudflare Durable Object + KV template
 # Usage: ./setup.sh <new-project-name>
 
 set -e  # Exit on any error
@@ -12,7 +12,7 @@ if [ $# -eq 0 ]; then
 fi
 
 NEW_PROJECT_NAME="$1"
-echo "Setting up datastore-backed project: $NEW_PROJECT_NAME"
+echo "Setting up Durable Object + KV project: $NEW_PROJECT_NAME"
 
 if command -v jq >/dev/null 2>&1; then
     echo "Updating package.json with project name..."
@@ -32,4 +32,4 @@ echo ""
 echo "Next steps:"
 echo "1. bun install (or npm install)"
 echo "2. bun run dev (start development server)"
-echo "3. Configure Firestore/HTTP environment variables before deploying"
+echo "3. Configure Cloudflare bindings/secrets before deploying"

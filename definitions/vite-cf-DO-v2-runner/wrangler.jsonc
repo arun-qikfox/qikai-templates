@@ -1,6 +1,10 @@
+/**
+ * Wrangler config for the Cloudflare Durable Object template
+ * STRICTLY DO NOT MODIFY THIS FILE - Hidden from AI to prevent breaking core functionality
+ */
  {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "vite-gcp-firestore-runner",
+	"name": "vite-cf-do-runner",
 	"main": "worker/index.ts",
 	"compatibility_date": "2025-04-24",
 	"assets": {
@@ -10,10 +14,20 @@
 	"observability": {
 		"enabled": true
 	},
-	"vars": {
-		"DATA_PROVIDER": "firestore",
-		"FIRESTORE_PROJECT_ID": "",
-		"FIRESTORE_CLIENT_EMAIL": "",
-		"FIRESTORE_DATABASE_ID": "(default)"
-	}
+    "durable_objects": {
+      "bindings": [
+        {
+          "name": "GlobalDurableObject",
+          "class_name": "GlobalDurableObject"
+        }
+      ]
+    },
+    "migrations": [
+      {
+        "tag": "v1",
+        "new_sqlite_classes": [
+          "GlobalDurableObject"
+        ]
+      }
+    ]
 }

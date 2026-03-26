@@ -20,6 +20,13 @@ import difflib
 import fnmatch
 import subprocess
 
+# Templates to exclude from generation (by template name / YAML stem)
+EXCLUDED_TEMPLATE_PATTERNS = [
+    "next-gcp-*",
+    "vite-cf-DO-*-gcp",
+    "vite-cf-do-*-gcp",
+]
+
 
 class Colors:
     """ANSI color codes for terminal output"""
@@ -80,6 +87,9 @@ class TemplateGenerator:
             'package-lock.json',
             'next-env.d.ts',
         ]
+
+    def _is_excluded_template(self, template_name: str) -> bool:
+        return any(fnmatch.fnmatch(template_name, pattern) for pattern in EXCLUDED_TEMPLATE_PATTERNS)
     
     def apply_package_patches(self, target_dir: Path, patches: Dict[str, Any]) -> bool:
         """
@@ -310,6 +320,10 @@ class TemplateGenerator:
         
         # Find all YAML template definition files
         for yaml_file in self.definitions_dir.glob("*.yaml"):
+            template_name = yaml_file.stem
+            if self._is_excluded_template(template_name):
+                log_info(f"Skipping excluded template definition: {template_name}")
+                continue
             if self.generate_template_from_yaml(yaml_file):
                 success_count += 1
             else:
@@ -328,6 +342,10 @@ class TemplateGenerator:
         Returns:
             True if successful, False otherwise
         """
+        if self._is_excluded_template(template_name):
+            log_warn(f"Template is excluded from generation by policy: {template_name}")
+            return True
+
         yaml_file = self.definitions_dir / f"{template_name}.yaml"
         
         if not yaml_file.exists():

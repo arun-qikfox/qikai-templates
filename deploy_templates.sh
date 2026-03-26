@@ -85,6 +85,12 @@ for dir in build/*/; do
   fi
   
   dir_name=$(basename "$dir")
+
+  # Exclude deprecated template families from deploy packaging
+  if [[ "$dir_name" == next-gcp-* || "$dir_name" == vite-cf-DO-*-gcp || "$dir_name" == vite-cf-do-*-gcp ]]; then
+    echo "⏭️  Skipping excluded template: $dir_name"
+    continue
+  fi
   
   # Skip non-template directories if any appear
   if [[ "$dir_name" == ".git" || "$dir_name" == "node_modules" || "$dir_name" == ".github" ]]; then

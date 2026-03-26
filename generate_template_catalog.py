@@ -18,6 +18,7 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 import argparse
+import fnmatch
 
 
 TEMPLATES_ROOT = Path(__file__).resolve().parent
@@ -29,6 +30,11 @@ VALID_WEBAPP_TYPES = {
     "blog", "saas", "chat", "crm", "other",
 }
 VALID_UI_PRESETS = {"liquid-glass", "material3", "shadcn-default", "minimal", "brutalist", "custom"}
+EXCLUDED_TEMPLATE_PATTERNS = {
+    "next-gcp-*",
+    "vite-cf-DO-*-gcp",
+    "vite-cf-do-*-gcp",
+}
 
 
 class Colors:
@@ -412,6 +418,11 @@ def main() -> None:
         for item in scan_dir.iterdir():
             # Skip non-directories and hidden/special directories
             if not item.is_dir() or item.name.startswith('.') or item.name in ('node_modules',):
+                continue
+
+            if any(fnmatch.fnmatch(item.name, pattern) for pattern in EXCLUDED_TEMPLATE_PATTERNS):
+                log_info(f"Skipping excluded template from catalog: {item.name}")
+                skipped_count += 1
                 continue
             
             platform = get_template_platform(item)

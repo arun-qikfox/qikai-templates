@@ -1,27 +1,22 @@
 # Template Selection
 
-General-purpose full-stack application template with Google Cloud Firestore as the default data store. The backend exposes a storage abstraction that can point to Firestore or any HTTPS-accessible database (e.g., MongoDB Data API) via environment configuration.
-
-## Template Constraints
-- Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`.
-- If a change is required, request it instead of editing those files.
+General-purpose multi-entity storage on Cloudflare Workers using one Durable Object (DO) as the storage backend. The DO is wrapped so multiple entities (users, chats, orgs, etc.) can persist data via simple APIs.
 
 Use when:
 - Backend-heavy apps with multiple entities and server-side persistence
 - Chats, ecommerce, dashboards
-- Cost-effective persistence
+- Cost-effective persistence without KV
 - General purpose storage for any multi-entity data
 
 Avoid when:
 - Static/SPAs with no backend
 - SEO/SSR landing pages
-- You need direct access to platform-specific features
+- You need SSR or DO features like alarms/direct DO access
 
-Note: Defaults to Google Cloud (App Engine + Firestore) but remains platform-agnostic. Swap providers (e.g., MongoDB) by supplying HTTPS credentials via environment variables.
+Note: No direct DO access. DO is storage-only; no alarms or extra DO features.
 
 Built with:
 - React Router, ShadCN UI, Tailwind, Lucide Icons, ESLint, Vite
-- Backend data layer with pluggable providers (`firestore` by default, `http` proxy for others)
-- Works on Cloudflare Workers, Google App Engine, or any hosting platform that can expose the same environment variables
+- Cloudflare Workers + a single DO for persistence
 
 
