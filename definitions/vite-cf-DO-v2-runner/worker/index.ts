@@ -5,6 +5,10 @@ import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { userRoutes } from './user-routes';
 import { Env } from './core-utils';
+import { GlobalDurableObject } from './core-utils';
+
+// Cloudflare DO bindings require class exports from the worker entry module.
+export { GlobalDurableObject };
 
 export interface ClientErrorReport {
   message: string;

@@ -58,13 +58,21 @@ if (import.meta.env.DEV) {
 
 const queryClient = new QueryClient();
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <HomePage />,
+      errorElement: <RouteErrorBoundary />,
+    },
+  ],
   {
-    path: "/",
-    element: <HomePage />,
-    errorElement: <RouteErrorBoundary />,
+    future: {
+      v7_startTransition: true,
+      v7_relativeSplatPath: true,
+    },
   },
-]);
+);
 
 // Do not touch this code
 createRoot(document.getElementById('root')!).render(

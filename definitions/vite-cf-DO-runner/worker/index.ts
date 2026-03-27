@@ -4,26 +4,29 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { userRoutes } from './userRoutes';
-import type { Env } from './core-utils';
+import { Env, GlobalDurableObject } from './core-utils';
+
+// Cloudflare DO bindings require class exports from the worker entry module.
+export { GlobalDurableObject };
+
 export interface ClientErrorReport {
-    message: string;
-    url: string;
-    userAgent: string;
-    timestamp: string;
-    stack?: string;
-    componentStack?: string;
-    errorBoundary?: boolean;
-    errorBoundaryProps?: Record<string, unknown>;
-    source?: string;
-    lineno?: number;
-    colno?: number;
-    error?: unknown;
-  }
+  message: string;
+  url: string;
+  timestamp: string;
+  stack?: string;
+  componentStack?: string;
+  errorBoundary?: boolean;
+  errorBoundaryProps?: Record<string, unknown>;
+  source?: string;
+  lineno?: number;
+  colno?: number;
+  error?: unknown;
+}
+
 const app = new Hono<{ Bindings: Env }>();
 
 app.use('*', logger());
 
-// **DO NOT TOUCH THE CODE BELOW THIS LINE**
 app.use('/api/*', cors({ origin: '*', allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], allowHeaders: ['Content-Type', 'Authorization'] }));
 
 userRoutes(app);
@@ -32,8 +35,7 @@ app.get('/api/health', (c) => c.json({ success: true, data: { status: 'healthy',
 app.post('/api/client-errors', async (c) => {
   try {
     const e = await c.req.json<ClientErrorReport>();
-    if (!e.message || !e.url || !e.userAgent) return c.json({ success: false, error: 'Missing required fields' }, 400);
-    console.error('[CLIENT ERROR]', JSON.stringify({ timestamp: e.timestamp || new Date().toISOString(), message: e.message, url: e.url, userAgent: e.userAgent, stack: e.stack, componentStack: e.componentStack, errorBoundary: e.errorBoundary, source: e.source, lineno: e.lineno, colno: e.colno }, null, 2));
+    console.error('[CLIENT ERROR]', JSON.stringify({ timestamp: e.timestamp || new Date().toISOString(), message: e.message, url: e.url, stack: e.stack, componentStack: e.componentStack, errorBoundary: e.errorBoundary }, null, 2));
     return c.json({ success: true });
   } catch (error) {
     console.error('[CLIENT ERROR HANDLER] Failed:', error);

@@ -140,6 +140,8 @@ export default ({ mode }: { mode: string }) => {
         "@": path.resolve(__dirname, "./src"),
         "@shared": path.resolve(__dirname, "./shared"),
       },
+      // Single React instance for Radix/shadcn + Vite prebundle (avoids invalid hook / null dispatcher)
+      dedupe: ["react", "react-dom"],
     },
     optimizeDeps: {
       // This is still crucial for reducing the time from when `bun run dev`
