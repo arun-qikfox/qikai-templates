@@ -28,4 +28,6 @@ Built with:
 - Standard Vite build process (no Cloudflare-specific build tools)
 - Emits frontend assets to `dist/client/**` (required by App Engine preview/deploy)
 
+Layout ownership:
+- Content-first template. Generate a single app-level page chrome in generated page files (header/nav/hero/footer) and avoid nested duplicate shells.
 

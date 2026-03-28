@@ -79,7 +79,8 @@ app.post('/api/users', async (c) => {
 - Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`. Request changes instead of editing them.
 
 ### Theme & Color System
-- `src/components/theme-provider.tsx` and the bundled mode toggle (in the navbar layout) already handle light/dark switching—reuse them whenever you restructure the shell. If you remove the stock header, add an obvious toggle back in Phase 1.
+- This template is content-first. Generate the full page structure (header/hero/sections/footer) directly in page files instead of assuming a template-owned marketing shell.
+- `src/components/theme-provider.tsx` and the bundled mode toggle already handle light/dark switching—place the toggle in your generated page chrome where appropriate.
 - Light mode is the primary spec, but dark mode must ship simultaneously. Use Tailwind `dark:` modifiers and the CSS variables (`--background`, `--foreground`, etc.) defined in `src/styles/globals.css` so both themes stay synchronized.
 - Avoid hard-coded text/background colors inside components. Introduce semantic tokens (e.g., `--brand-primary`, `--surface-muted`) through Tailwind or CSS variables and apply them consistently across both themes.
 - QA every scene (landing, dashboard, bookings, settings) in both modes before completing a phase to catch low-contrast or washed-out states early.

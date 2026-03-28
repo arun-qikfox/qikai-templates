@@ -28,3 +28,5 @@ Built with:
 - Emits production assets to `dist/client/**` (required by App Engine preview/deploy)
 - TypeScript for type safety
 
+Layout ownership:
+- Content-first template. Generate a single app-level page chrome in generated page files (header/nav/hero/footer) and avoid nested duplicate shells.

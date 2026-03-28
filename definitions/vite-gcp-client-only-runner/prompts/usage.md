@@ -35,7 +35,8 @@ npm run preview  # Preview production build
 - Do not modify template-owned config files like `vite.config.ts` or `tsconfig*.json`. Request changes instead of editing them.
 
 ### Theme & Color System
-- Theme toggle is available in the layout
+- This template is content-first. Generate the full page structure (header/hero/sections/footer) directly in page files instead of relying on a template-owned shell.
+- Theme toggle support is available via existing theme wiring; place it in the generated page chrome when needed.
 - Light mode is the primary spec, but dark mode must ship simultaneously
 - Use Tailwind `dark:` modifiers and CSS variables defined in `src/index.css`
 - Avoid hard-coded text/background colors inside components
@@ -50,4 +51,3 @@ App Engine serves the built static files from `dist/client/`:
 - `index.html` is served for all routes (SPA routing)
 - All assets (JS, CSS, images) are served with appropriate caching headers
 - The `app.yaml` configuration handles routing for client-side navigation
-
